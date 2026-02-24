@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDEA Scan — Configuración</title>
+<link rel="icon" type="image/png" href="/mnt/user-data/uploads/image__1_.png">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1f5c;--b800:#0d2b7a;--b700:#1a3fa3;--b600:#1a4dbf;--b500:#2d6ef5;
+  --b400:#5b9bf8;--b200:#c5dcfd;--b50:#f0f6ff;--cyan:#00c2ff;
+  --sw:240px;--th:60px;--surf:#f4f8ff;--bord:#e4eaf8;
+  --t9:#0a1f5c;--t6:#3a5aad;--t4:#6b83c4;--t3:#a0b3d8;
+  --ok:#22c77a;--warn:#f59e0b;--danger:#ef4444;
+  --sh-sm:0 1px 4px rgba(10,31,92,.06);--sh-md:0 4px 16px rgba(10,31,92,.10);
+  --sh-lg:0 8px 32px rgba(10,31,92,.16);--sh-xl:0 20px 60px rgba(10,31,92,.22);
+  --rad:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Inter',sans-serif;background:var(--surf);color:var(--t9);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.app{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);background:var(--navy);position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;}
+.sidebar::-webkit-scrollbar{width:3px;}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
+.sb-h{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
+.sb-logo{width:36px;height:36px;border-radius:9px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.3);}
+.sb-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.sb-brand{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1;}
+.sb-brand em{font-style:normal;color:var(--cyan);}
+.sb-ver{font-size:9px;color:rgba(255,255,255,.3);margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+.sb-user{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-av{width:34px;height:34px;background:linear-gradient(135deg,var(--b600),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+
+
+
+
+
+
+.nav-i.active 
+
+.nav-i.active 
+
+
+
+
+
+
+.nav-item.active 
+.nav-item:hover 
+
+.nav-item.active 
+
+.nav-item.ai-btn 
+.nav-item.ai-btn 
+
+
+.nav-i.ai 
+.nav-i.ai 
+.sb-foot{margin-top:auto;padding:14px 8px;border-top:1px solid rgba(255,255,255,.07);}
+
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:var(--th);background:#fff;border-bottom:1px solid var(--bord);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;gap:14px;box-shadow:var(--sh-sm);}
+.tb-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:900;color:var(--t9);letter-spacing:-.3px;}
+.tb-bread{font-size:13px;color:var(--t3);}
+.tb-bread span{color:var(--b500);}
+.tb-av{margin-left:auto;width:34px;height:34px;background:linear-gradient(135deg,var(--b700),var(--b400));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;border:2px solid var(--b200);}
+
+/* PAGE LAYOUT */
+.page-wrap{display:flex;min-height:calc(100vh - var(--th));}
+
+/* LEFT NAV */
+.cfg-nav{width:220px;background:#fff;border-right:1px solid var(--bord);padding:20px 12px;flex-shrink:0;position:sticky;top:var(--th);height:calc(100vh - var(--th));overflow-y:auto;}
+.cfg-nav::-webkit-scrollbar{width:3px;}
+.cn-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);padding:0 8px;margin-bottom:6px;margin-top:16px;}
+.cn-lbl:first-child{margin-top:0;}
+.cn-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all .13s;margin-bottom:2px;}
+.cn-item:hover{background:var(--b50);}
+.cn-item.on{background:var(--b50);color:var(--b600);}
+.cn-item.on .cn-ico{background:var(--b500);color:#fff;}
+.cn-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surf);flex-shrink:0;transition:all .13s;}
+.cn-txt{font-size:13px;font-weight:600;color:var(--t6);}
+.cn-item.on .cn-txt{color:var(--b600);}
+
+/* RIGHT CONTENT */
+.cfg-content{flex:1;padding:28px 32px 60px;max-width:900px;}
+
+/* SECTION */
+.cfg-section{display:none;}
+.cfg-section.on{display:block;}
+.sec-hdr{margin-bottom:22px;}
+.sec-title{font-family:'Exo 2',sans-serif;font-size:20px;font-weight:900;color:var(--t9);letter-spacing:-.3px;margin-bottom:4px;}
+.sec-sub{font-size:13px;color:var(--t4);}
+
+/* CARD */
+.cfg-card{background:#fff;border:1px solid var(--bord);border-radius:var(--rad);box-shadow:var(--sh-sm);margin-bottom:18px;overflow:hidden;}
+.cc-head{padding:16px 20px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px;}
+.cc-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.cc-title{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:var(--t9);}
+.cc-sub{font-size:11px;color:var(--t4);margin-top:1px;}
+.cc-body{padding:20px;}
+.cc-footer{padding:14px 20px;border-top:1px solid var(--bord);display:flex;justify-content:flex-end;gap:8px;}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.fg:last-child{margin-bottom:0;}
+.fg-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.fg-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.flbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t4);}
+.flbl .req{color:var(--danger);}
+.finput{background:var(--surf);border:1.5px solid var(--bord);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--t9);font-family:'Inter',sans-serif;outline:none;transition:all .18s;width:100%;}
+.finput:focus{border-color:var(--b400);box-shadow:0 0 0 3px rgba(45,110,245,.08);}
+.finput:disabled{opacity:.5;cursor:not-allowed;}
+.fsel{background:var(--surf);border:1.5px solid var(--bord);border-radius:9px;padding:10px 32px 10px 13px;font-size:13px;color:var(--t9);font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b83c4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;width:100%;}
+.fsel:focus{border-color:var(--b400);}
+.fhint{font-size:10px;color:var(--t3);margin-top:2px;}
+.ftextarea{background:var(--surf);border:1.5px solid var(--bord);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--t9);font-family:'Inter',sans-serif;outline:none;transition:all .18s;width:100%;resize:vertical;min-height:80px;}
+.ftextarea:focus{border-color:var(--b400);box-shadow:0 0 0 3px rgba(45,110,245,.08);}
+
+/* TOGGLE SWITCH */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surf);border:1px solid var(--bord);border-radius:10px;margin-bottom:8px;}
+.toggle-info{flex:1;}
+.toggle-name{font-size:13px;font-weight:600;color:var(--t9);}
+.toggle-sub{font-size:11px;color:var(--t3);margin-top:2px;}
+.toggle-sw{position:relative;width:42px;height:24px;flex-shrink:0;margin-left:16px;}
+.toggle-sw input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;cursor:pointer;inset:0;background:var(--bord);border-radius:12px;transition:.25s;}
+.toggle-track::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+input:checked+.toggle-track{background:var(--b500);}
+input:checked+.toggle-track::before{transform:translateX(18px);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .17s;font-family:'Inter',sans-serif;white-space:nowrap;}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;}
+.btn-xs{padding:5px 10px;font-size:11px;border-radius:7px;}
+.btn-ghost{background:#fff;color:var(--t6);border:1.5px solid var(--bord);}
+.btn-ghost:hover{background:var(--b50);border-color:var(--b400);}
+.btn-primary{background:linear-gradient(135deg,var(--b700),var(--b500));color:#fff;box-shadow:0 4px 14px rgba(45,110,245,.3);}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-danger{background:linear-gradient(135deg,#b91c1c,var(--danger));color:#fff;}
+.btn-warn{background:linear-gradient(135deg,#b45309,var(--warn));color:#fff;}
+.btn-ok{background:linear-gradient(135deg,#065f46,var(--ok));color:#fff;}
+
+/* LOGO UPLOAD */
+.logo-upload{display:flex;align-items:center;gap:20px;padding:16px;background:var(--surf);border:2px dashed var(--b200);border-radius:12px;cursor:pointer;transition:all .2s;}
+.logo-upload:hover{border-color:var(--b400);background:var(--b50);}
+.logo-preview{width:80px;height:80px;border-radius:12px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--bord);flex-shrink:0;}
+.logo-preview img{width:100%;height:100%;object-fit:contain;}
+.logo-info{font-size:12px;color:var(--t4);}
+.logo-info strong{display:block;font-size:13px;color:var(--t6);margin-bottom:3px;}
+
+/* CLIENT / WH TABLE */
+.item-table{width:100%;border-collapse:collapse;}
+.item-table th{padding:9px 12px;text-align:left;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--t4);background:var(--surf);border-bottom:1.5px solid var(--bord);}
+.item-table td{padding:11px 12px;border-bottom:1px solid var(--bord);vertical-align:middle;font-size:13px;}
+.item-table tr:last-child td{border-bottom:none;}
+.item-table tr:hover td{background:rgba(45,110,245,.02);}
+.cl-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;}
+.item-actions{display:flex;gap:5px;}
+
+/* INTEGRATION CARD */
+.int-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.int-card{border:1.5px solid var(--bord);border-radius:12px;padding:16px;display:flex;align-items:flex-start;gap:12px;transition:all .15s;}
+.int-card:hover{border-color:var(--b400);box-shadow:var(--sh-sm);}
+.int-card.connected{border-color:rgba(34,199,122,.3);background:rgba(34,199,122,.03);}
+.int-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--surf);border:1px solid var(--bord);}
+.int-name{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:var(--t9);margin-bottom:3px;}
+.int-desc{font-size:11px;color:var(--t4);line-height:1.4;margin-bottom:8px;}
+.int-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;}
+.int-status.on{background:rgba(34,199,122,.1);color:#059669;border:1px solid rgba(34,199,122,.25);}
+.int-status.off{background:var(--surf);color:var(--t3);border:1px solid var(--bord);}
+
+/* ALERT RULES */
+.alert-rule{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surf);border:1px solid var(--bord);border-radius:10px;margin-bottom:8px;}
+.ar-ico{font-size:20px;}
+.ar-info{flex:1;}
+.ar-name{font-size:13px;font-weight:600;color:var(--t9);}
+.ar-sub{font-size:11px;color:var(--t3);margin-top:1px;}
+.ar-thresh{width:70px;background:#fff;border:1.5px solid var(--bord);border-radius:7px;padding:6px 8px;font-size:13px;font-weight:700;text-align:center;font-family:'Exo 2',sans-serif;color:var(--t9);outline:none;}
+.ar-thresh:focus{border-color:var(--b400);}
+.ar-unit{font-size:11px;color:var(--t3);white-space:nowrap;}
+
+/* API KEY */
+.api-key-wrap{display:flex;align-items:center;gap:8px;}
+.api-key-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--b600);background:var(--b50);border:1px solid var(--b200);border-radius:8px;padding:9px 14px;flex:1;word-break:break-all;line-height:1.5;}
+
+/* MODAL */
+.m-overlay{position:fixed;inset:0;background:rgba(10,31,92,.44);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.m-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:20px;box-shadow:var(--sh-xl);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:translateY(14px);transition:transform .22s;}
+.m-overlay.open .modal{transform:translateY(0);}
+.m-head{padding:20px 22px 14px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:#fff;z-index:1;border-radius:20px 20px 0 0;}
+.m-ico-box{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.m-title{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:800;color:var(--t9);}
+.m-sub{font-size:11px;color:var(--t4);margin-top:2px;}
+.m-close{margin-left:auto;width:30px;height:30px;border-radius:7px;border:1px solid var(--bord);background:var(--surf);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--t4);}
+.m-close:hover{background:rgba(239,68,68,.07);color:var(--danger);}
+.m-body{padding:18px 22px;}
+.m-foot{padding:14px 22px 18px;border-top:1px solid var(--bord);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 20px 20px;}
+
+/* Color picker for clients */
+.color-swatches{display:flex;gap:7px;flex-wrap:wrap;}
+.swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .13s;}
+.swatch:hover{transform:scale(1.12);}
+.swatch.on{border-color:#fff;box-shadow:0 0 0 2px var(--b500);}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:11px;box-shadow:var(--sh-lg);z-index:1000;transform:translateY(80px);opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
+.toast.show{transform:translateY(0);opacity:1;}
+.t-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.t-msg{font-size:13px;font-weight:700;}
+.t-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;}
+
+@media(max-width:1024px){.int-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){
+  .main{margin-left:0;}
+  .page-wrap{flex-direction:column;}
+  .cfg-nav{
+    width:100%;height:auto;position:static;
+    display:flex;flex-direction:row;flex-wrap:nowrap;
+    overflow-x:auto;overflow-y:hidden;
+    border-right:none;border-bottom:1px solid var(--bord);
+    padding:8px 12px;gap:4px;
+  }
+  .cfg-nav::-webkit-scrollbar{height:3px;}
+  .cn-lbl{display:none;}
+  .cn-item{flex-shrink:0;padding:7px 12px;white-space:nowrap;}
+  .cfg-content{padding:16px 14px 60px;max-width:100%;}
+}
+@media(max-width:600px){.fg-grid,.fg-grid3{grid-template-columns:1fr;}}
+
+/* ── USUARIOS EMBED (admin only) ── */
+:root{
+  --r-admin:#0d2b7a;   --r-admin-bg:rgba(13,43,122,.08);   --r-admin-bd:rgba(13,43,122,.2);
+  --r-gerente:#0891b2; --r-gerente-bg:rgba(8,145,178,.08); --r-gerente-bd:rgba(8,145,178,.2);
+  --r-op:#059669;      --r-op-bg:rgba(5,150,105,.08);      --r-op-bd:rgba(5,150,105,.2);
+  --r-client:#7c3aed;  --r-client-bg:rgba(124,58,237,.08); --r-client-bd:rgba(124,58,237,.2);
+}
+.u-sec{display:none;}.u-sec.on{display:block;}
+.admin-gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:16px;background:var(--surf);border:1.5px dashed var(--bord);border-radius:14px;padding:40px;}
+.admin-gate-ico{font-size:48px;}
+.admin-gate-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:900;color:var(--t9);}
+.admin-gate-sub{font-size:13px;color:var(--t4);text-align:center;max-width:340px;line-height:1.6;}
+.role-switch{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.rs-btn{padding:8px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--bord);background:#fff;color:var(--t6);transition:all .14s;font-family:'Inter',sans-serif;}
+.rs-btn:hover{border-color:var(--b400);background:var(--b50);}
+.rs-btn.on{background:linear-gradient(135deg,var(--b700),var(--b500));color:#fff;border-color:transparent;}
+/* KPI strip (reuse with u- prefix to avoid conflicts) */
+.u-kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.u-kpi{background:#fff;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;box-shadow:var(--sh-sm);position:relative;overflow:hidden;}
+.u-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.u-kpi.k1::before{background:linear-gradient(90deg,var(--b500),var(--cyan));}
+.u-kpi.k2::before{background:linear-gradient(90deg,var(--r-admin),#3b82f6);}
+.u-kpi.k3::before{background:linear-gradient(90deg,var(--r-op),#34d399);}
+.u-kpi.k4::before{background:linear-gradient(90deg,var(--r-client),#a78bfa);}
+.u-kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.u-kpi-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.u-kpi-val{font-family:'Exo 2',sans-serif;font-size:24px;font-weight:900;color:var(--t9);margin-bottom:2px;}
+.u-kpi-lbl{font-size:11px;color:var(--t4);}
+.u-kpi-sub{font-size:9px;color:var(--t3);margin-top:6px;padding-top:6px;border-top:1px solid var(--bord);}
+/* Users layout */
+.u-layout{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start;}
+.u-list-card{background:#fff;border:1px solid var(--bord);border-radius:var(--rad);box-shadow:var(--sh-sm);overflow:hidden;}
+.u-lc-head{padding:14px 18px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.u-lc-title{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:var(--t9);}
+.u-lc-search{display:flex;align-items:center;gap:7px;background:var(--surf);border:1.5px solid var(--bord);border-radius:8px;padding:6px 10px;margin-left:auto;}
+.u-lc-search:focus-within{border-color:var(--b400);}
+.u-lc-search input{border:none;background:none;outline:none;font-size:12px;font-family:'Inter',sans-serif;color:var(--t9);width:160px;}
+.u-role-pills{display:flex;gap:5px;padding:10px 18px;border-bottom:1px solid var(--bord);flex-wrap:wrap;}
+.u-rpill{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--bord);color:var(--t4);background:#fff;transition:all .14s;}
+.u-rpill.on{border-color:transparent;color:#fff;}
+.u-rpill.on.all    {background:var(--b600);}
+.u-rpill.on.admin  {background:var(--r-admin);}
+.u-rpill.on.gerente{background:var(--r-gerente);}
+.u-rpill.on.op     {background:var(--r-op);}
+.u-rpill.on.client {background:var(--r-client);}
+.u-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--bord);cursor:pointer;transition:background .12s;position:relative;}
+.u-row:last-child{border-bottom:none;}
+.u-row:hover{background:var(--b50);}
+.u-row.sel{background:var(--b50);border-right:3px solid var(--b500);}
+.u-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 6px rgba(0,0,0,.12);}
+.u-name-lbl{font-size:13px;font-weight:700;color:var(--t9);margin-bottom:1px;}
+.u-email-lbl{font-size:11px;color:var(--t3);}
+.u-rb{font-size:9px;font-weight:800;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.5px;}
+.u-rb.admin  {background:var(--r-admin-bg);color:var(--r-admin);border:1px solid var(--r-admin-bd);}
+.u-rb.gerente{background:var(--r-gerente-bg);color:var(--r-gerente);border:1px solid var(--r-gerente-bd);}
+.u-rb.op     {background:var(--r-op-bg);color:var(--r-op);border:1px solid var(--r-op-bd);}
+.u-rb.client {background:var(--r-client-bg);color:var(--r-client);border:1px solid var(--r-client-bd);}
+.u-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.u-dot.online{background:var(--ok);box-shadow:0 0 0 2px rgba(34,199,122,.2);}
+.u-dot.offline{background:var(--t3);}
+/* detail card */
+.u-detail{background:#fff;border:1px solid var(--bord);border-radius:var(--rad);box-shadow:var(--sh-sm);position:sticky;top:80px;overflow:hidden;}
+.u-dc-empty{padding:50px 20px;text-align:center;}
+.u-cover{height:64px;position:relative;}
+.u-cover-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:18px;font-weight:900;color:#fff;position:absolute;bottom:-27px;left:18px;border:3px solid #fff;box-shadow:var(--sh-md);}
+.u-dbody{padding:36px 18px 0;}
+.u-dname{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:900;color:var(--t9);margin-bottom:2px;}
+.u-demail{font-size:11px;color:var(--t4);margin-bottom:10px;}
+.u-dsec{border-top:1px solid var(--bord);padding:12px 18px;}
+.u-dsec-ttl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:9px;}
+.u-dgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.u-dfield{background:var(--surf);border:1px solid var(--bord);border-radius:8px;padding:8px 10px;}
+.u-dflbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:2px;}
+.u-dfval{font-size:12px;font-weight:600;color:var(--t9);}
+.u-perm-row{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:var(--surf);border:1px solid var(--bord);border-radius:7px;margin-bottom:4px;}
+.u-perm-name{font-size:11px;font-weight:600;color:var(--t6);display:flex;align-items:center;gap:5px;}
+.u-pchip{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;}
+.u-pchip.on.ver   {background:rgba(34,199,122,.1);color:#059669;border:1px solid rgba(34,199,122,.3);}
+.u-pchip.on.editar{background:rgba(245,158,11,.1); color:#b45309;border:1px solid rgba(245,158,11,.3);}
+.u-pchip.on.admin {background:rgba(239,68,68,.1);  color:#dc2626;border:1px solid rgba(239,68,68,.3);}
+.u-pchip.off{background:var(--bord);color:var(--t3);opacity:.45;}
+.u-act-item{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;background:var(--surf);border-radius:7px;border:1px solid var(--bord);margin-bottom:4px;}
+.u-act-ico{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:#fff;border:1px solid var(--bord);}
+.u-act-desc{font-size:11px;font-weight:600;color:var(--t6);}
+.u-act-time{font-size:9px;color:var(--t3);margin-top:1px;}
+/* modal */
+.u-m-overlay{position:fixed;inset:0;background:rgba(10,31,92,.44);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.u-m-overlay.open{opacity:1;pointer-events:all;}
+.u-modal{background:#fff;border-radius:20px;box-shadow:var(--sh-xl);width:100%;max-width:540px;max-height:90vh;overflow-y:auto;transform:translateY(14px);transition:transform .22s;}
+.u-m-overlay.open .u-modal{transform:translateY(0);}
+.u-mhead{padding:18px 20px 12px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:#fff;z-index:1;border-radius:20px 20px 0 0;}
+.u-mico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.u-mclose{margin-left:auto;width:28px;height:28px;border-radius:7px;border:1px solid var(--bord);background:var(--surf);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--t4);}
+.u-mclose:hover{background:rgba(239,68,68,.07);color:var(--danger);}
+.u-mbody{padding:16px 20px;}
+.u-mfoot{padding:12px 20px 16px;border-top:1px solid var(--bord);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 20px 20px;}
+.u-av-colors{display:flex;gap:7px;flex-wrap:wrap;}
+.u-av-color{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .14s;}
+.u-av-color.on{border-color:#fff;box-shadow:0 0 0 2px var(--b500);}
+.u-toggle-grp{display:flex;gap:4px;}
+.u-ttoggle{padding:3px 8px;border-radius:5px;border:1.5px solid var(--bord);font-size:9px;font-weight:800;text-transform:uppercase;cursor:pointer;transition:all .13s;color:var(--t4);background:#fff;}
+.u-ttoggle.on.ver   {background:rgba(34,199,122,.1);color:#059669;border-color:rgba(34,199,122,.35);}
+.u-ttoggle.on.editar{background:rgba(245,158,11,.1); color:#b45309;border-color:rgba(245,158,11,.35);}
+.u-ttoggle.on.admin {background:rgba(239,68,68,.1);  color:#dc2626;border-color:rgba(239,68,68,.35);}
+.u-check-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.u-check-item{display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:8px;border:1.5px solid var(--bord);cursor:pointer;transition:all .14s;}
+.u-check-item:hover{border-color:var(--b400);}
+.u-check-item.on{border-color:var(--b500);background:var(--b50);}
+.u-check-box{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--t3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.u-check-item.on .u-check-box{background:var(--b500);border-color:var(--b500);color:#fff;}
+.u-check-lbl{font-size:11px;font-weight:600;color:var(--t6);}
+.u-check-item.on .u-check-lbl{color:var(--b600);}
+.u-dft-sec-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin:12px 0 7px;}
+.u-m-perm-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--surf);border:1px solid var(--bord);border-radius:8px;margin-bottom:4px;}
+.u-m-perm-name{font-size:11px;font-weight:600;color:var(--t6);display:flex;align-items:center;gap:5px;}
+@media(max-width:1100px){.u-layout{grid-template-columns:1fr;}}
+@media(max-width:700px){.u-kpi-strip{grid-template-columns:1fr 1fr;}}
+
+.nav-label{padding:18px 18px 8px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 18px;margin:1px 8px;border-radius:10px;cursor:pointer;transition:background .15s;position:relative;text-decoration:none;}
+.nav-item:hover{background:rgba(255,255,255,.06);}
+.nav-item.active{background:linear-gradient(90deg,rgba(45,110,245,.35),rgba(45,110,245,.15));}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--cyan);border-radius:0 2px 2px 0;}
+.nav-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(255,255,255,.05);transition:background .15s;}
+.nav-item.active .nav-icon{background:rgba(45,110,245,.4);}
+.nav-item:hover .nav-icon{background:rgba(255,255,255,.1);}
+.nav-text{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);}
+.nav-item.active .nav-text{color:#fff;font-weight:600;}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;background:#ef4444;color:#fff;}
+.nav-item.ai-btn{background:linear-gradient(90deg,rgba(124,58,237,.25),rgba(124,58,237,.1));border:1px solid rgba(124,58,237,.2);}
+.nav-item.ai-btn .nav-icon{background:rgba(124,58,237,.3);}
+.nav-item.ai-btn .nav-text{color:rgba(220,200,255,.9);font-weight:600;}
+
+@media(max-width:1024px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s ease;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199;}
+  .sidebar-overlay.open{display:block;}
+  .main{margin-left:0 !important;}
+  .hamburger{display:flex !important;}
+}
+
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text-900,#0a1f5c);border-radius:2px;}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://usqugtxeynkozlobeojt.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcXVndHhleW5rb3psb2Jlb2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwOTYxMzAsImV4cCI6MjA4NjY3MjEzMH0.zs4XiF8AgcE-l3ebtaxvoN7V9rf-6MHWNxMThiQUXKE';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ── Username → Email conversion ──────────────────────────────
+// Supabase Auth requiere email. Usamos un dominio ficticio interno.
+// El usuario solo ve/escribe su username; el dominio se agrega en código.
+const AUTH_DOMAIN = 'ideascan.wms';
+function toAuthEmail(username){ return username.toLowerCase() + '@' + AUTH_DOMAIN; }
+const EDGE_USER_ADMIN = `${SUPA_URL}/functions/v1/user-admin`;
+
+// ── Llama al Edge Function user-admin (tiene service_role) ──
+async function userAdminCall(payload) {
+  const res = await fetch(EDGE_USER_ADMIN, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPA_KEY,
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || `Error ${res.status}`);
+  return data;
+}
+function fromAuthEmail(email){ return email.replace('@' + AUTH_DOMAIN, ''); }
+</script>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-h">
+    <div class="sb-logo"><img src="/mnt/user-data/uploads/image__1_.png" alt="" onerror="this.parentNode.style.background='#1a4dbf';this.style.display='none'"></div>
+    <div><div class="sb-brand">IDEA <em>Scan</em></div><div class="sb-ver">v2.0 · WMS</div></div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-av">JR</div>
+    <div>
+      <div class="sb-uname">Juan Rodríguez</div>
+      <div class="sb-urole">Administrador</div>
+    </div>
+  </div>
+  <div class="nav-label">Principal</div>
+  <a class="nav-item" href="ideascan-dashboard.html">
+    <div class="nav-icon">📊</div>
+    <span class="nav-text">Dashboard</span>
+  </a>
+  <a class="nav-item" href="ideascan-movements.html">
+    <div class="nav-icon">🔄</div>
+    <span class="nav-text">Movimientos</span>
+  </a>
+  <a class="nav-item" href="ideascan-orders.html">
+    <div class="nav-icon">📋</div>
+    <span class="nav-text">Órdenes</span>
+    <span class="nav-badge">12</span>
+  </a>
+  <a class="nav-item" href="ideascan-map.html">
+    <div class="nav-icon">🗺️</div>
+    <span class="nav-text">Mapa Almacén</span>
+  </a>
+  <div class="nav-label">IA</div>
+  <a class="nav-item ai-btn" href="ideascan-ai-entry.html">
+    <div class="nav-icon">🤖</div>
+    <span class="nav-text">Entrada con IA</span>
+  </a>
+  <div class="nav-label">Reportes</div>
+  <a class="nav-item" href="ideascan-reports.html">
+    <div class="nav-icon">📑</div>
+    <span class="nav-text">Reportes</span>
+  </a>
+  <div class="nav-label">Sistema</div>
+  <a class="nav-item active" href="ideascan-config.html">
+    <div class="nav-icon">⚙️</div>
+    <span class="nav-text">Configuración</span>
+  </a>
+  <div class="sb-foot">
+    <a class="nav-item" href="#">
+      <div class="nav-icon">🚪</div>
+      <span class="nav-text">Cerrar sesión</span>
+    </a>
+  </div>
+</aside>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="main">
+  <div class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+    <div><div class="tb-title">Configuración</div><div class="tb-bread">IDEA Scan · <span>Configuración</span></div></div>
+    <div class="tb-av">JR</div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- LEFT NAV -->
+    <nav class="cfg-nav">
+      <div class="cn-lbl">General</div>
+      <div class="cn-item on" onclick="showSection('empresa',this)"><div class="cn-ico">🏢</div><span class="cn-txt">Empresa</span></div>
+      <div class="cn-item" onclick="showSection('clientes',this)"><div class="cn-ico">👥</div><span class="cn-txt">Clientes</span></div>
+      <div class="cn-item" onclick="showSection('almacenes',this)"><div class="cn-ico">🏭</div><span class="cn-txt">Almacenes</span></div>
+      <div class="cn-lbl">Operación</div>
+      <div class="cn-item" onclick="showSection('inventario',this)"><div class="cn-ico">📦</div><span class="cn-txt">Inventario</span></div>
+      <div class="cn-item" onclick="showSection('alertas',this)"><div class="cn-ico">🔔</div><span class="cn-txt">Alertas</span></div>
+      <div class="cn-item" onclick="showSection('reportes',this)"><div class="cn-ico">📑</div><span class="cn-txt">Reportes</span></div>
+      <div class="cn-lbl">Sistema</div>
+      <div class="cn-item" onclick="showSection('usuarios',this)"><div class="cn-ico">👥</div><span class="cn-txt">Usuarios <span style="font-size:8px;font-weight:800;background:rgba(239,68,68,.12);color:var(--danger);padding:1px 5px;border-radius:4px;margin-left:3px">Admin</span></span></div>
+      <div class="cn-item" onclick="showSection('apariencia',this)"><div class="cn-ico">🎨</div><span class="cn-txt">Apariencia</span></div>
+      <div class="cn-item" onclick="showSection('integraciones',this)"><div class="cn-ico">🔌</div><span class="cn-txt">Integraciones</span></div>
+      <div class="cn-item" onclick="showSection('api',this)"><div class="cn-ico">🔑</div><span class="cn-txt">API & Acceso</span></div>
+      <div class="cn-item" onclick="showSection('respaldo',this)"><div class="cn-ico">💾</div><span class="cn-txt">Respaldo</span></div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="cfg-content">
+
+      <!-- ═══ EMPRESA ═══ -->
+      <div class="cfg-section on" id="sec-empresa">
+        <div class="sec-hdr"><div class="sec-title">🏢 Datos de la Empresa</div><div class="sec-sub">Información general del operador logístico</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🏢</div><div><div class="cc-title">Información general</div><div class="cc-sub">Nombre, RFC, dirección y contacto</div></div></div>
+          <div class="cc-body">
+            <div class="fg-grid">
+              <div class="fg"><label class="flbl">Razón social <span class="req">*</span></label><input class="finput" id="emp_razon" value="IDEA Scan Logistics S.A. de C.V."></div>
+              <div class="fg"><label class="flbl">Nombre comercial</label><input class="finput" id="emp_nombre" value="IDEA Scan WMS"></div>
+              <div class="fg"><label class="flbl">RFC <span class="req">*</span></label><input class="finput" id="emp_rfc" value="ISL2401013P2" style="text-transform:uppercase"></div>
+              <div class="fg"><label class="flbl">Teléfono</label><input class="finput" id="emp_tel" value="+52 664 123 4567"></div>
+            </div>
+            <div class="fg"><label class="flbl">Dirección fiscal</label><input class="finput" id="emp_dir" value="Blvd. Insurgentes 18250, Tijuana, B.C., México"></div>
+            <div class="fg-grid">
+              <div class="fg"><label class="flbl">Correo de contacto</label><input class="finput" id="emp_email" value="ops@ideascan.mx" type="email"></div>
+              <div class="fg"><label class="flbl">Sitio web</label><input class="finput" id="emp_web" value="www.ideascan.mx"></div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-ghost btn-sm">Cancelar</button><button class="btn btn-primary btn-sm" onclick="saveSection('empresa')">✓ Guardar cambios</button></div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🖼</div><div><div class="cc-title">Logo de la empresa</div><div class="cc-sub">Aparece en reportes, documentos y la interfaz</div></div></div>
+          <div class="cc-body">
+            <div class="logo-upload" onclick="document.getElementById('logoInput').click()">
+              <div class="logo-preview"><img src="/mnt/user-data/uploads/image__1_.png" id="logoImg" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;font-size:28px">🏢</span></div>
+              <div class="logo-info"><strong>Haz clic para cambiar el logo</strong>PNG, JPG o SVG · Máximo 2 MB · Recomendado 200×200px</div>
+            </div>
+            <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewLogo(this)">
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CLIENTES ═══ -->
+      <div class="cfg-section" id="sec-clientes">
+        <div class="sec-hdr">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div><div class="sec-title">👥 Clientes</div><div class="sec-sub">Gestiona los clientes del operador logístico</div></div>
+            <button class="btn btn-primary btn-sm" onclick="openClientModal()">＋ Nuevo cliente</button>
+          </div>
+        </div>
+        <div class="cfg-card">
+          <div class="cc-body" style="padding:0;">
+            <table class="item-table" id="clientTable"></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ALMACENES ═══ -->
+      <div class="cfg-section" id="sec-almacenes">
+        <div class="sec-hdr">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div><div class="sec-title">🏭 Almacenes</div><div class="sec-sub">Información de cada instalación logística</div></div>
+            <button class="btn btn-primary btn-sm" onclick="openWhModal()">＋ Nuevo almacén</button>
+          </div>
+        </div>
+        <div class="cfg-card">
+          <div class="cc-body" style="padding:0;">
+            <table class="item-table" id="whTable"></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INVENTARIO ═══ -->
+      <div class="cfg-section" id="sec-inventario">
+        <div class="sec-hdr"><div class="sec-title">📦 Parámetros de Inventario</div><div class="sec-sub">Niveles de stock, alertas y reglas de control</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(34,199,122,.09)">📊</div><div><div class="cc-title">Niveles de stock</div><div class="cc-sub">Umbrales para alertas automáticas</div></div></div>
+          <div class="cc-body">
+            <div class="alert-rule"><div class="ar-ico">🔴</div><div class="ar-info"><div class="ar-name">Stock mínimo crítico</div><div class="ar-sub">Alerta roja cuando el stock baje de este porcentaje</div></div><input class="ar-thresh" id="inv_min" value="10"><span class="ar-unit">% capacidad</span></div>
+            <div class="alert-rule"><div class="ar-ico">🟠</div><div class="ar-info"><div class="ar-name">Stock bajo</div><div class="ar-sub">Alerta naranja para niveles de reabastecimiento</div></div><input class="ar-thresh" id="inv_low" value="25"><span class="ar-unit">% capacidad</span></div>
+            <div class="alert-rule"><div class="ar-ico">🟡</div><div class="ar-info"><div class="ar-name">Capacidad alta</div><div class="ar-sub">Alerta cuando el almacén supere este % de ocupación</div></div><input class="ar-thresh" id="inv_high" value="85"><span class="ar-unit">% ocupación</span></div>
+            <div class="alert-rule"><div class="ar-ico">⏱</div><div class="ar-info"><div class="ar-name">Días sin movimiento</div><div class="ar-sub">Marcar SKU como "estático" si no tiene movimiento</div></div><input class="ar-thresh" id="inv_static" value="30"><span class="ar-unit">días</span></div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('inventario')">✓ Guardar umbrales</button></div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">⚙️</div><div><div class="cc-title">Comportamiento del inventario</div></div></div>
+          <div class="cc-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Permitir stock negativo</div><div class="toggle-sub">Registrar salidas aunque no haya stock suficiente</div></div><label class="toggle-sw"><input type="checkbox" id="t_neg"><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Control por lotes (FIFO)</div><div class="toggle-sub">Salidas con criterio First In, First Out automáticamente</div></div><label class="toggle-sw"><input type="checkbox" id="t_fifo" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Control por número de serie</div><div class="toggle-sub">Rastrear cada unidad por número de serie individual</div></div><label class="toggle-sw"><input type="checkbox" id="t_serial"><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Requerir confirmación en salidas</div><div class="toggle-sub">El gerente debe aprobar cada orden de salida</div></div><label class="toggle-sw"><input type="checkbox" id="t_confirm" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Actualizar mapa automáticamente</div><div class="toggle-sub">Refleja cambios de ocupación en el mapa al registrar movimientos</div></div><label class="toggle-sw"><input type="checkbox" id="t_map" checked><div class="toggle-track"></div></label></div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('inventario')">✓ Guardar configuración</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ ALERTAS ═══ -->
+      <div class="cfg-section" id="sec-alertas">
+        <div class="sec-hdr"><div class="sec-title">🔔 Configuración de Alertas</div><div class="sec-sub">Define cuándo y cómo se generan notificaciones automáticas</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(245,158,11,.09)">🔔</div><div><div class="cc-title">Reglas de alerta automática</div></div></div>
+          <div class="cc-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de stock mínimo</div><div class="toggle-sub">Notificar cuando un SKU baje del umbral configurado</div></div><label class="toggle-sw"><input type="checkbox" id="a_stock" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de capacidad de almacén</div><div class="toggle-sub">Notificar cuando la ocupación supere el umbral</div></div><label class="toggle-sw"><input type="checkbox" id="a_cap" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de órdenes pendientes</div><div class="toggle-sub">Notificar órdenes sin procesar después de X horas</div></div><label class="toggle-sw"><input type="checkbox" id="a_ord" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de paquetería sin tracking</div><div class="toggle-sub">Notificar paquetes sin número de rastreo asignado</div></div><label class="toggle-sw"><input type="checkbox" id="a_pkg" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de SKUs estáticos</div><div class="toggle-sub">Notificar mercancía sin movimiento por más de X días</div></div><label class="toggle-sw"><input type="checkbox" id="a_static"><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Alerta de temperatura fuera de rango</div><div class="toggle-sub">Aplica para zonas con control de temperatura (cold chain)</div></div><label class="toggle-sw"><input type="checkbox" id="a_temp"><div class="toggle-track"></div></label></div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('alertas')">✓ Guardar alertas</button></div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">📧</div><div><div class="cc-title">Canales de notificación</div></div></div>
+          <div class="cc-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Notificaciones en sistema</div><div class="toggle-sub">Alertas visibles en el módulo de Alertas</div></div><label class="toggle-sw"><input type="checkbox" id="n_sys" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Correo electrónico</div><div class="toggle-sub">Enviar email al gerente y administrador</div></div><label class="toggle-sw"><input type="checkbox" id="n_email" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">WhatsApp / SMS</div><div class="toggle-sub">Requiere integración con Twilio o similar</div></div><label class="toggle-sw"><input type="checkbox" id="n_wa"><div class="toggle-track"></div></label></div>
+            <div style="margin-top:14px;">
+              <div class="fg"><label class="flbl">Correos para notificaciones (separados por coma)</label><input class="finput" id="notif_emails" value="admin@ideascan.mx, ops@ideascan.mx"></div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('alertas')">✓ Guardar</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ REPORTES ═══ -->
+      <div class="cfg-section" id="sec-reportes">
+        <div class="sec-hdr"><div class="sec-title">📑 Configuración de Reportes</div><div class="sec-sub">Formato, encabezados y programación de reportes automáticos</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">📄</div><div><div class="cc-title">Formato de exportación</div></div></div>
+          <div class="cc-body">
+            <div class="fg-grid">
+              <div class="fg"><label class="flbl">Formato predeterminado</label>
+                <select class="fsel" id="r_fmt"><option value="xlsx">XLS / Excel</option><option value="csv">CSV</option><option value="wms">WMS</option><option value="pdf">PDF</option></select>
+              </div>
+              <div class="fg"><label class="flbl">Separador CSV</label>
+                <select class="fsel" id="r_sep"><option value=",">Coma (,)</option><option value=";">Punto y coma (;)</option><option value="\t">Tabulador</option></select>
+              </div>
+              <div class="fg"><label class="flbl">Formato de fecha</label>
+                <select class="fsel" id="r_date"><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option><option value="MM/DD/YYYY">MM/DD/YYYY</option></select>
+              </div>
+              <div class="fg"><label class="flbl">Zona horaria</label>
+                <select class="fsel" id="r_tz"><option value="America/Tijuana">America/Tijuana (PST)</option><option value="America/Mexico_City">America/Mexico_City (CST)</option><option value="America/Monterrey">America/Monterrey (CST)</option></select>
+              </div>
+            </div>
+            <div class="toggle-row" style="margin-top:6px;"><div class="toggle-info"><div class="toggle-name">Incluir logo en reportes PDF</div></div><label class="toggle-sw"><input type="checkbox" id="r_logo" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Reporte automático diario</div><div class="toggle-sub">Genera y envía el reporte de movimientos cada día a las 23:59</div></div><label class="toggle-sw"><input type="checkbox" id="r_auto"><div class="toggle-track"></div></label></div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('reportes')">✓ Guardar</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ APARIENCIA ═══ -->
+      <div class="cfg-section" id="sec-apariencia">
+        <div class="sec-hdr"><div class="sec-title">🎨 Apariencia</div><div class="sec-sub">Personaliza los colores, idioma y presentación del sistema</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🎨</div><div><div class="cc-title">Color principal del sistema</div><div class="cc-sub">Afecta la barra lateral, botones y acentos de toda la interfaz</div></div></div>
+          <div class="cc-body">
+            <div class="fg">
+              <div class="flbl" style="margin-bottom:10px;">Tema de color</div>
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;" id="themeGrid"></div>
+            </div>
+            <div style="background:var(--surf);border:1px solid var(--bord);border-radius:10px;padding:14px;margin-top:8px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:10px;">Vista previa</div>
+              <div id="themePreview" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <div id="prev-sidebar" style="width:120px;height:72px;border-radius:8px;display:flex;flex-direction:column;padding:8px;gap:5px;">
+                  <div style="height:8px;border-radius:4px;background:rgba(255,255,255,.15);width:70%"></div>
+                  <div id="prev-nav-active" style="height:8px;border-radius:4px;width:85%"></div>
+                  <div style="height:8px;border-radius:4px;background:rgba(255,255,255,.1);width:60%"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div id="prev-btn" style="padding:6px 14px;border-radius:7px;font-size:11px;font-weight:800;color:#fff;display:inline-block;">Botón primario</div>
+                  <div style="display:flex;gap:6px;">
+                    <div id="prev-badge" style="font-size:9px;font-weight:800;padding:2px 8px;border-radius:100px;color:#fff;">Activo</div>
+                    <div id="prev-tag" style="font-size:9px;font-weight:800;padding:2px 8px;border-radius:100px;border:1px solid;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-ghost btn-sm">Cancelar</button><button class="btn btn-primary btn-sm" onclick="applyTheme()">✓ Aplicar tema</button></div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🌐</div><div><div class="cc-title">Idioma y región</div></div></div>
+          <div class="cc-body">
+            <div class="fg-grid">
+              <div class="fg">
+                <label class="flbl">Idioma de la interfaz</label>
+                <select class="fsel" id="lang_ui">
+                  <option value="es" selected>🇲🇽 Español (México)</option>
+                  <option value="es_es">🇪🇸 Español (España)</option>
+                  <option value="en">🇺🇸 English</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="flbl">Formato de números</label>
+                <select class="fsel" id="lang_num">
+                  <option value="es-MX" selected>1,234.56 (MX)</option>
+                  <option value="es-ES">1.234,56 (ES)</option>
+                  <option value="en-US">1,234.56 (US)</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="flbl">Moneda</label>
+                <select class="fsel" id="lang_cur">
+                  <option value="MXN" selected>MXN — Peso mexicano</option>
+                  <option value="USD">USD — Dólar americano</option>
+                  <option value="EUR">EUR — Euro</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="flbl">Primer día de la semana</label>
+                <select class="fsel" id="lang_week">
+                  <option value="0" selected>Domingo</option>
+                  <option value="1">Lunes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('apariencia')">✓ Guardar idioma</button></div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">📐</div><div><div class="cc-title">Densidad y presentación</div></div></div>
+          <div class="cc-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Modo compacto</div><div class="toggle-sub">Reduce el espaciado entre filas en tablas para ver más datos</div></div><label class="toggle-sw"><input type="checkbox" id="ui_compact"><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Sidebar colapsado por defecto</div><div class="toggle-sub">El menú lateral inicia minimizado en pantallas grandes</div></div><label class="toggle-sw"><input type="checkbox" id="ui_sidebar"><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Animaciones de interfaz</div><div class="toggle-sub">Transiciones y efectos visuales (desactivar mejora rendimiento)</div></div><label class="toggle-sw"><input type="checkbox" id="ui_anim" checked><div class="toggle-track"></div></label></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Mostrar conteo de registros en sidebar</div><div class="toggle-sub">Badges con número de items activos en cada módulo</div></div><label class="toggle-sw"><input type="checkbox" id="ui_badges" checked><div class="toggle-track"></div></label></div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('apariencia')">✓ Guardar presentación</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ INTEGRACIONES ═══ -->
+      <div class="cfg-section" id="sec-integraciones">
+        <div class="sec-hdr"><div class="sec-title">🔌 Integraciones</div><div class="sec-sub">Conecta IDEA Scan con sistemas externos</div></div>
+        <div class="cfg-card">
+          <div class="cc-body">
+            <div class="int-grid" id="intGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ API ═══ -->
+      <div class="cfg-section" id="sec-api">
+        <div class="sec-hdr"><div class="sec-title">🔑 API & Acceso Externo</div><div class="sec-sub">Claves de API para integraciones de terceros</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🔑</div><div><div class="cc-title">Clave de API de producción</div><div class="cc-sub">Úsala para conectar ERP, e-commerce u otros sistemas</div></div></div>
+          <div class="cc-body">
+            <div class="fg">
+              <div class="flbl">API Key</div>
+              <div class="api-key-wrap">
+                <div class="api-key-val" id="apiKeyVal">isk_live_••••••••••••••••••••••••••••••••</div>
+                <button class="btn btn-ghost btn-sm" onclick="toggleApiKey()">👁 Mostrar</button>
+                <button class="btn btn-ghost btn-sm" onclick="copyApiKey()">📋 Copiar</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn btn-warn btn-sm" onclick="regenerateKey()">🔄 Regenerar clave</button>
+            </div>
+            <div class="fhint" style="margin-top:10px;">⚠️ Al regenerar, todas las integraciones existentes dejarán de funcionar hasta que actualices la clave.</div>
+          </div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(45,110,245,.09)">🌐</div><div><div class="cc-title">Webhooks</div><div class="cc-sub">Recibe notificaciones automáticas en tu sistema</div></div></div>
+          <div class="cc-body">
+            <div class="fg"><label class="flbl">URL del webhook</label><input class="finput" id="webhook_url" placeholder="https://tusistema.com/webhook/ideascan"></div>
+            <div class="fg"><label class="flbl">Secreto de firma</label><input class="finput" id="webhook_secret" placeholder="Generado automáticamente al guardar" disabled></div>
+            <div style="margin-top:6px;">
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Notificar en nuevas entradas</div></div><label class="toggle-sw"><input type="checkbox" id="wh_in" checked><div class="toggle-track"></div></label></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Notificar en salidas procesadas</div></div><label class="toggle-sw"><input type="checkbox" id="wh_out" checked><div class="toggle-track"></div></label></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Notificar en paquetería confirmada</div></div><label class="toggle-sw"><input type="checkbox" id="wh_pkg" checked><div class="toggle-track"></div></label></div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('api')">✓ Guardar webhook</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ RESPALDO ═══ -->
+      <div class="cfg-section" id="sec-respaldo">
+        <div class="sec-hdr"><div class="sec-title">💾 Respaldo de Datos</div><div class="sec-sub">Exporta y restaura la información del sistema</div></div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(34,199,122,.09)">📤</div><div><div class="cc-title">Exportar datos</div><div class="cc-sub">Descarga un respaldo completo del sistema</div></div></div>
+          <div class="cc-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="exportBackup('inventario')"><span style="font-size:18px">📦</span><div style="text-align:left"><div style="font-size:12px;font-weight:700;">Inventario completo</div><div style="font-size:10px;color:var(--t3)">SKUs, stock y ubicaciones</div></div></button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="exportBackup('movimientos')"><span style="font-size:18px">🔄</span><div style="text-align:left"><div style="font-size:12px;font-weight:700;">Historial de movimientos</div><div style="font-size:10px;color:var(--t3)">Entradas, salidas y traslados</div></div></button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="exportBackup('ordenes')"><span style="font-size:18px">📋</span><div style="text-align:left"><div style="font-size:12px;font-weight:700;">Órdenes</div><div style="font-size:10px;color:var(--t3)">Salidas, traslados y paquetería</div></div></button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="exportBackup('usuarios')"><span style="font-size:18px">👥</span><div style="text-align:left"><div style="font-size:12px;font-weight:700;">Usuarios y permisos</div><div style="font-size:10px;color:var(--t3)">Configuración de accesos</div></div></button>
+            </div>
+            <div style="margin-top:14px;">
+              <button class="btn btn-primary" onclick="exportBackup('completo')">💾 Exportar respaldo completo (ZIP)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cfg-card">
+          <div class="cc-head"><div class="cc-ico" style="background:rgba(245,158,11,.09)">⚙️</div><div><div class="cc-title">Respaldo automático</div></div></div>
+          <div class="cc-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Respaldo automático diario</div><div class="toggle-sub">Se genera un respaldo completo cada 24 horas</div></div><label class="toggle-sw"><input type="checkbox" id="bk_auto" checked><div class="toggle-track"></div></label></div>
+            <div class="fg-grid" style="margin-top:12px;">
+              <div class="fg"><label class="flbl">Retención (días)</label><input class="finput" id="bk_days" type="number" value="30" min="7" max="365"><div class="fhint">Respaldos más antiguos se eliminan automáticamente</div></div>
+              <div class="fg"><label class="flbl">Hora del respaldo</label><input class="finput" id="bk_time" type="time" value="02:00"></div>
+            </div>
+          </div>
+          <div class="cc-footer"><button class="btn btn-primary btn-sm" onclick="saveSection('respaldo')">✓ Guardar</button></div>
+        </div>
+      </div>
+
+
+      <!-- ═══ USUARIOS (solo admin) ═══ -->
+      <div class="cfg-section" id="sec-usuarios">
+        <div class="sec-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:var(--th,60px);background:var(--surf,#f4f8ff);z-index:10;padding:12px 0 16px;margin-bottom:14px;border-bottom:1px solid var(--bord,#e4eaf8);">
+          <div>
+            <div class="sec-title">👥 Gestión de Usuarios</div>
+            <div class="sec-sub">Roles, permisos y acceso por módulo</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="uOpenNewUser()">＋ Nuevo usuario</button>
+        </div>
+
+
+
+        <!-- ADMIN GATE: shown for non-admin roles -->
+        <div class="u-sec" id="u-gate" style="display:none">
+          <div class="admin-gate">
+            <div class="admin-gate-ico">🔒</div>
+            <div class="admin-gate-title">Acceso restringido</div>
+            <div class="admin-gate-sub">La gestión de usuarios solo está disponible para el rol <strong>Administrador</strong>. Tu rol actual no tiene permisos para ver o modificar usuarios del sistema.</div>
+          </div>
+        </div>
+
+        <!-- ADMIN CONTENT: shown only for admin role -->
+        <div id="u-content">
+          <!-- KPIs -->
+          <div class="u-kpi-strip" id="uKpiStrip"></div>
+
+          <!-- Layout -->
+          <div class="u-layout">
+            <!-- User list -->
+            <div class="u-list-card">
+              <div class="u-lc-head">
+                <div class="u-lc-title">Usuarios del sistema</div>
+                <div class="u-lc-search">
+                  <span style="font-size:12px;color:var(--t3)">🔍</span>
+                  <input type="text" placeholder="Buscar…" id="uSearch" oninput="uRenderList()">
+                </div>
+              </div>
+              <div class="u-role-pills">
+                <div class="u-rpill on all" onclick="uSetFilter('all',this)">Todos</div>
+                <div class="u-rpill" onclick="uSetFilter('admin',this)">👑 Admin</div>
+                <div class="u-rpill" onclick="uSetFilter('gerente',this)">🏭 Gerente</div>
+                <div class="u-rpill" onclick="uSetFilter('op',this)">⚙️ Operador</div>
+                <div class="u-rpill" onclick="uSetFilter('client',this)">👤 Cliente</div>
+              </div>
+              <div id="uList"></div>
+            </div>
+
+            <!-- Detail -->
+            <div class="u-detail" id="uDetail">
+              <div class="u-dc-empty" id="uDcEmpty" style="padding:50px 20px;text-align:center;">
+                <div style="font-size:36px;margin-bottom:10px">👆</div>
+                <div style="font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:var(--t6);margin-bottom:5px">Selecciona un usuario</div>
+                <div style="font-size:11px;color:var(--t3)">Ver perfil, permisos y actividad</div>
+              </div>
+              <div id="uDcContent" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cfg-content -->
+  </div><!-- /page-wrap -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+
+<!-- USERS MODAL (embedded) -->
+<div class="u-m-overlay" id="uModal" onclick="if(event.target===this)uCloseModal()">
+  <div class="u-modal">
+    <div class="u-mhead">
+      <div class="u-mico" style="background:rgba(45,110,245,.1)">👤</div>
+      <div><div class="m-title" id="uMTitle">Nuevo usuario</div><div class="m-sub">Completa la información</div></div>
+      <div class="u-mclose" onclick="uCloseModal()">✕</div>
+    </div>
+    <div class="u-mbody">
+      <div class="fg"><div class="flbl">Color de avatar</div><div class="u-av-colors" id="uAvColors"></div></div>
+      <div class="fg"><label class="flbl">Usuario <span class="req">*</span></label>
+        <input class="finput" id="uF_username" placeholder="Ej: Leo01" autocomplete="off" style="font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.5px;">
+        <div style="font-size:10px;color:var(--t3);margin-top:4px">Solo letras, números y guión bajo. Ej: <strong>LuisR01</strong> → Supabase lo registra como <em><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3a564f5349480a0b7a535e5f5b49595b54144d5749">[email&#160;protected]</a></em></div>
+      </div>
+      <div class="fg-grid">
+        <div class="fg"><label class="flbl">Nombre <span class="req">*</span></label><input class="finput" id="uF_name" placeholder="Nombre"></div>
+        <div class="fg"><label class="flbl">Apellido</label><input class="finput" id="uF_last" placeholder="Apellido"></div>
+      </div>
+      <div class="fg" id="uF_pass_wrap"><label class="flbl">Contraseña <span class="req" id="uPassReq">*</span></label>
+        <div style="position:relative;">
+          <input class="finput" id="uF_password" type="password" placeholder="Mín. 8 chars, mayúscula, número y símbolo" style="padding-right:42px;" autocomplete="new-password">
+          <button type="button" onclick="uTogglePass()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--t3);" id="uPassEye">👁</button>
+        </div>
+        <div style="font-size:10px;color:var(--t3);margin-top:4px" id="uPassHint">Al editar, déjala en blanco para no cambiarla. La contraseña se guarda en Supabase Auth.</div>
+      </div>
+      <div class="fg-grid">
+        <div class="fg"><label class="flbl">Rol <span class="req">*</span></label>
+          <select class="fsel" id="uF_role" onchange="uOnRoleChange()">
+            <option value="admin">👑 Administrador</option>
+            <option value="gerente">🏭 Gerente</option>
+            <option value="op" selected>⚙️ Operador</option>
+            <option value="client">👤 Cliente</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flbl">Estado</label>
+          <select class="fsel" id="uF_status">
+            <option value="active">✅ Activo</option>
+            <option value="inactive">⛔ Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-divider"></div>
+      <div class="fg"><div class="modal-section-title">🏭 Almacenes</div><div class="u-check-grid" id="uWhChecks"></div></div>
+      <div class="fg" id="uClientWrap" style="display:none">
+        <div class="modal-section-title">🏢 Cliente asignado</div>
+        <select class="fsel" id="uF_client">
+          <option value="">Sin asignar</option>
+          <!-- opciones cargadas dinámicamente desde U_CLIENTS -->
+        </select>
+      </div>
+      <div class="f-divider"></div>
+      <div class="modal-section-title">🔐 Permisos por módulo</div>
+      <div id="uPermRows"></div>
+    </div>
+    <div class="u-mfoot">
+      <button class="btn btn-ghost btn-sm" onclick="uCloseModal()">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="uSaveUser()">✓ Guardar usuario</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT MODAL -->
+<div class="m-overlay" id="clientModal" onclick="if(event.target===this)closeModal('clientModal')">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-ico-box" style="background:rgba(45,110,245,.1)">🏢</div>
+      <div><div class="m-title" id="clModalTitle">Nuevo cliente</div><div class="m-sub">Información del cliente 3PL</div></div>
+      <div class="m-close" onclick="closeModal('clientModal')">✕</div>
+    </div>
+    <div class="m-body">
+      <div class="fg-grid">
+        <div class="fg"><label class="flbl">Nombre <span class="req">*</span></label><input class="finput" id="cl_name" placeholder="Ej. TechCorp S.A."></div>
+        <div class="fg"><label class="flbl">RFC / ID fiscal</label><input class="finput" id="cl_rfc" placeholder="RFC opcional"></div>
+        <div class="fg"><label class="flbl">Contacto principal</label><input class="finput" id="cl_contact" placeholder="Nombre del contacto"></div>
+        <div class="fg"><label class="flbl">Teléfono</label><input class="finput" id="cl_tel" placeholder="+52 XXX XXX XXXX"></div>
+      </div>
+      <div class="fg"><label class="flbl">Correo electrónico</label><input class="finput" id="cl_email" type="email" placeholder="contacto@empresa.com"></div>
+      <div class="fg"><label class="flbl">Notas / Contrato</label><textarea class="ftextarea" id="cl_notes" placeholder="Condiciones especiales, número de contrato…"></textarea></div>
+      <div class="fg">
+        <div class="flbl">Color identificador</div>
+        <div class="color-swatches" id="clColorPicker"></div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('clientModal')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" id="clSaveBtn" onclick="saveClient()">✓ Guardar cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- WAREHOUSE MODAL -->
+<div class="m-overlay" id="whModal" onclick="if(event.target===this)closeModal('whModal')">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-ico-box" style="background:rgba(45,110,245,.1)">🏭</div>
+      <div><div class="m-title" id="whModalTitle">Nuevo almacén</div><div class="m-sub">Información del almacén</div></div>
+      <div class="m-close" onclick="closeModal('whModal')">✕</div>
+    </div>
+    <div class="m-body">
+      <div class="fg-grid">
+        <div class="fg"><label class="flbl">Nombre <span class="req">*</span></label><input class="finput" id="wh_name" placeholder="Ej. Almacén Monterrey Norte"></div>
+        <div class="fg"><label class="flbl">Código interno</label><input class="finput" id="wh_code" placeholder="Ej. MTY-N" style="text-transform:uppercase"></div>
+      </div>
+      <div class="fg"><label class="flbl">Dirección</label><input class="finput" id="wh_addr" placeholder="Calle, colonia, ciudad, estado"></div>
+      <div class="fg-grid">
+        <div class="fg"><label class="flbl">Superficie (m²)</label><input class="finput" id="wh_m2" type="number" placeholder="Ej. 2500"></div>
+        <div class="fg"><label class="flbl">Capacidad (ubicaciones)</label><input class="finput" id="wh_cap" type="number" placeholder="Ej. 800"></div>
+        <div class="fg"><label class="flbl">Teléfono</label><input class="finput" id="wh_tel" placeholder="+52 XXX XXX XXXX"></div>
+        <div class="fg"><label class="flbl">Encargado</label><input class="finput" id="wh_mgr" placeholder="Nombre del gerente"></div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('whModal')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" id="whSaveBtn" onclick="saveWh()">✓ Guardar almacén</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="t-ico" id="tIco">✓</div><div><div class="t-msg" id="tMsg"></div><div class="t-sub" id="tSub"></div></div></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ═══════════════════════════════════
+//  DATA
+// ═══════════════════════════════════
+const SWATCHES = ['#2d6ef5','#7c3aed','#059669','#d97706','#db2777','#dc2626','#0891b2','#374151','#0f766e','#b45309'];
+
+let clients = []; // cargado desde Supabase
+let nextClientId = 7;
+let editClientId = null;
+let selectedClColor = SWATCHES[0];
+
+let warehouses = []; // cargado desde Supabase
+let nextWhId = 4;
+let editWhId = null;
+
+// Integrations
+const INTEGRATIONS = [
+  { id:'dhl',     name:'DHL Express',     ico:'🚚', desc:'Tracking y generación de guías DHL automáticamente',  connected:true  },
+  { id:'fedex',   name:'FedEx',           ico:'📦', desc:'Integración con la API de FedEx para paquetería',      connected:false },
+  { id:'estafeta',name:'Estafeta',        ico:'🛵', desc:'Conexión con el WS de Estafeta para guías y tracking', connected:true  },
+  { id:'redpack', name:'Redpack',         ico:'📮', desc:'API de Redpack para generación de etiquetas',          connected:false },
+  { id:'sap',     name:'SAP ERP',         ico:'🏗',  desc:'Sincronización bidireccional con SAP Business One',   connected:false },
+  { id:'excel',   name:'Excel / CSV',     ico:'📊', desc:'Importación y exportación masiva desde archivos',      connected:true  },
+];
+
+// API key
+const REAL_KEY = 'isk_live_7f3d9e2a1c8b4e6f0a5d7c3b9e2f8a1d4c6e0b2f9a3d7c1e5b8f2a4c0d6e9b3f';
+let keyVisible = false;
+
+// ═══════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════
+function showSection(id, el) {
+  document.querySelectorAll('.cfg-section').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.cn-item').forEach(i=>i.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  el.classList.add('on');
+  if(id === 'usuarios') uInit();
+}
+
+// ═══════════════════════════════════
+//  CLIENT TABLE
+// ═══════════════════════════════════
+function renderClients() {
+  if (!clients.length) {
+    document.getElementById('clientTable').innerHTML =
+      '<tbody><tr><td colspan="6" style="text-align:center;color:var(--t3);padding:40px;font-size:14px">No hay clientes registrados. Agrega el primero con el botón de arriba.</td></tr></tbody>';
+    return;
+  }
+  document.getElementById('clientTable').innerHTML = `
+    <thead><tr>
+      <th>Cliente</th><th>RFC</th><th>Contacto</th>
+      <th>Email</th><th>Teléfono</th><th style="text-align:right">Acciones</th>
+    </tr></thead>
+    <tbody>${clients.map(c=>`
+      <tr>
+        <td><div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:${c.color};flex-shrink:0;"></div>
+          <span style="font-weight:700;color:var(--t9)">${c.name}</span>
+        </div></td>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t6)">${c.rfc||'—'}</span></td>
+        <td style="color:var(--t6)">${c.contact||'—'}</td>
+        <td style="font-size:12px;color:var(--t4)">${c.email||'—'}</td>
+        <td style="font-size:12px;color:var(--t4)">${c.tel||'—'}</td>
+        <td style="text-align:right">
+          <div class="item-actions" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-xs" onclick="openClientModal(${c.id})">✏️ Editar</button>
+            <button class="btn btn-xs" style="background:rgba(239,68,68,.08);color:var(--danger);border:1px solid rgba(239,68,68,.2)" onclick="deleteClient(${c.id})">🗑</button>
+          </div>
+        </td>
+      </tr>`).join('')}
+    </tbody>`;
+}
+
+function buildColorPicker(selected) {
+  document.getElementById('clColorPicker').innerHTML = SWATCHES.map(c=>
+    `<div class="swatch${c===selected?' on':''}" style="background:${c}" onclick="selectClColor('${c}',this)"></div>`
+  ).join('');
+  selectedClColor = selected || SWATCHES[0];
+}
+function selectClColor(c, el) {
+  selectedClColor = c;
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function openClientModal(id=null) {
+  editClientId = id;
+  const cl = id ? clients.find(c=>c.id===id) : null;
+  document.getElementById('clModalTitle').textContent = cl ? `Editar · ${cl.name}` : 'Nuevo cliente';
+  document.getElementById('cl_name').value    = cl?.name    || '';
+  document.getElementById('cl_rfc').value     = cl?.rfc     || '';
+  document.getElementById('cl_contact').value = cl?.contact || '';
+  document.getElementById('cl_tel').value     = cl?.tel     || '';
+  document.getElementById('cl_email').value   = cl?.email   || '';
+  document.getElementById('cl_notes').value   = cl?.notes   || '';
+  buildColorPicker(cl?.color || SWATCHES[0]);
+  document.getElementById('clientModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+async function saveClient() {
+  const name = document.getElementById('cl_name').value.trim();
+  if(!name){ showToast('⚠️','El nombre es obligatorio','warn'); return; }
+  const btn = document.querySelector('#clientModal .btn-primary');
+  if(btn){ btn.disabled=true; btn.textContent='Guardando…'; }
+  try {
+    if(editClientId) {
+      // Actualizar en Supabase
+      await sbFetch('PATCH', `clientes?id=eq.${editClientId}`, {
+        nombre:   name,
+        rfc:      document.getElementById('cl_rfc').value.trim(),
+        contacto: document.getElementById('cl_contact').value.trim(),
+        telefono: document.getElementById('cl_tel').value.trim(),
+        email:    document.getElementById('cl_email').value.trim(),
+        notas:    document.getElementById('cl_notes').value.trim(),
+        color:    selectedClColor,
+      });
+      showToast('✓',`${name} actualizado`,'ok');
+    } else {
+      // Insertar en Supabase
+      const inserted = await sbFetch('POST', 'clientes', {
+        nombre:   name,
+        codigo:   name.substring(0,8).toUpperCase().replace(/\s/g,''),
+        rfc:      document.getElementById('cl_rfc').value.trim(),
+        contacto: document.getElementById('cl_contact').value.trim(),
+        telefono: document.getElementById('cl_tel').value.trim(),
+        email:    document.getElementById('cl_email').value.trim(),
+        notas:    document.getElementById('cl_notes').value.trim(),
+        color:    selectedClColor,
+        activo:   true,
+      });
+      showToast('✓',`${name} agregado`,'ok');
+    }
+    closeModal('clientModal');
+    await loadConfigFromDB(); // recargar desde DB
+  } catch(e) {
+    showToast('❌','Error al guardar cliente: '+e.message,'warn');
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='Guardar'; }
+  }
+}
+async function deleteClient(id) {
+  const cl = clients.find(c=>c.id===id);
+  if(!cl) return;
+  if(!confirm(`¿Eliminar cliente "${cl.name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await sbFetch('DELETE', `clientes?id=eq.${id}`, null);
+    clients = clients.filter(c=>c.id!==id);
+    renderClients();
+    showToast('🗑',`${cl.name} eliminado`,'warn');
+  } catch(e) {
+    showToast('❌','Error al eliminar: '+e.message,'warn');
+  }
+}
+
+// ═══════════════════════════════════
+//  WAREHOUSE TABLE
+// ═══════════════════════════════════
+function renderWarehouses() {
+  if (!warehouses.length) {
+    document.getElementById('whTable').innerHTML =
+      '<tbody><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:40px;font-size:14px">No hay almacenes registrados. Agrega el primero con el botón de arriba.</td></tr></tbody>';
+    return;
+  }
+  document.getElementById('whTable').innerHTML = `
+    <thead><tr>
+      <th>Almacén</th><th>Código</th><th>Dirección</th>
+      <th>Superficie</th><th>Capacidad</th><th>Encargado</th>
+      <th style="text-align:right">Acciones</th>
+    </tr></thead>
+    <tbody>${warehouses.map(w=>`
+      <tr>
+        <td style="font-weight:700;color:var(--t9)">🏭 ${w.name}</td>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--b600);background:var(--b50);padding:2px 8px;border-radius:5px;border:1px solid var(--b200)">${w.code}</span></td>
+        <td style="font-size:12px;color:var(--t4);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${w.addr}</td>
+        <td style="font-size:13px;font-weight:600">${w.m2?.toLocaleString()||'—'} m²</td>
+        <td style="font-size:13px;font-weight:600">${w.cap?.toLocaleString()||'—'}</td>
+        <td style="font-size:12px;color:var(--t6)">${w.mgr||'—'}</td>
+        <td style="text-align:right">
+          <div class="item-actions" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-xs" onclick="openWhModal(${w.id})">✏️ Editar</button>
+            <button class="btn btn-xs" style="background:rgba(239,68,68,.08);color:var(--danger);border:1px solid rgba(239,68,68,.2)" onclick="deleteWh(${w.id})">🗑</button>
+          </div>
+        </td>
+      </tr>`).join('')}
+    </tbody>`;
+}
+function openWhModal(id=null) {
+  editWhId = id;
+  const wh = id ? warehouses.find(w=>w.id===id) : null;
+  document.getElementById('whModalTitle').textContent = wh ? `Editar · ${wh.name}` : 'Nuevo almacén';
+  document.getElementById('wh_name').value = wh?.name || '';
+  document.getElementById('wh_code').value = wh?.code || '';
+  document.getElementById('wh_addr').value = wh?.addr || '';
+  document.getElementById('wh_m2').value   = wh?.m2   || '';
+  document.getElementById('wh_cap').value  = wh?.cap  || '';
+  document.getElementById('wh_tel').value  = wh?.tel  || '';
+  document.getElementById('wh_mgr').value  = wh?.mgr  || '';
+  document.getElementById('whModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+async function saveWh() {
+  const name = document.getElementById('wh_name').value.trim();
+  if(!name){ showToast('⚠️','El nombre es obligatorio','warn'); return; }
+  const btn = document.querySelector('#whModal .btn-primary');
+  if(btn){ btn.disabled=true; btn.textContent='Guardando…'; }
+  try {
+    const payload = {
+      nombre:        name,
+      codigo:        document.getElementById('wh_code').value.toUpperCase().trim() || name.substring(0,6).toUpperCase(),
+      direccion:     document.getElementById('wh_addr').value.trim(),
+      superficie_m2: parseInt(document.getElementById('wh_m2').value)||0,
+      capacidad:     parseInt(document.getElementById('wh_cap').value)||0,
+      telefono:      document.getElementById('wh_tel').value.trim(),
+      encargado:     document.getElementById('wh_mgr').value.trim(),
+      activo:        true,
+    };
+    if(editWhId) {
+      await sbFetch('PATCH', `almacenes?id=eq.${editWhId}`, payload);
+      showToast('✓',`${name} actualizado`,'ok');
+    } else {
+      await sbFetch('POST', 'almacenes', payload);
+      showToast('✓',`${name} agregado`,'ok');
+    }
+    closeModal('whModal');
+    await loadConfigFromDB(); // recargar desde DB
+  } catch(e) {
+    showToast('❌','Error al guardar almacén: '+e.message,'warn');
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='Guardar'; }
+  }
+}
+async function deleteWh(id) {
+  const wh = warehouses.find(w=>w.id===id);
+  if(!wh) return;
+  if(!confirm(`¿Eliminar almacén "${wh.name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await sbFetch('DELETE', `almacenes?id=eq.${id}`, null);
+    warehouses = warehouses.filter(w=>w.id!==id);
+    renderWarehouses();
+    showToast('🗑',`${wh.name} eliminado`,'warn');
+  } catch(e) {
+    showToast('❌','Error al eliminar: '+e.message,'warn');
+  }
+}
+
+// ═══════════════════════════════════
+//  INTEGRATIONS
+// ═══════════════════════════════════
+function renderIntegrations() {
+  document.getElementById('intGrid').innerHTML = INTEGRATIONS.map(i=>`
+    <div class="int-card${i.connected?' connected':''}">
+      <div class="int-ico">${i.ico}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+          <div class="int-name">${i.name}</div>
+          <span class="int-status ${i.connected?'on':'off'}">${i.connected?'● Conectado':'○ Desconectado'}</span>
+        </div>
+        <div class="int-desc">${i.desc}</div>
+        <button class="btn btn-sm ${i.connected?'btn-ghost':'btn-primary'}" style="margin-top:6px" onclick="toggleIntegration('${i.id}')">
+          ${i.connected?'⚙️ Configurar':'＋ Conectar'}
+        </button>
+      </div>
+    </div>`).join('');
+}
+function toggleIntegration(id) {
+  const i = INTEGRATIONS.find(x=>x.id===id);
+  if(i.connected) { i.connected=false; showToast('🔌',`${i.name} desconectado`,'warn'); }
+  else            { i.connected=true;  showToast('✓', `${i.name} conectado`,'ok'); }
+  renderIntegrations();
+}
+
+// ═══════════════════════════════════
+//  API KEY
+// ═══════════════════════════════════
+function toggleApiKey() {
+  keyVisible = !keyVisible;
+  document.getElementById('apiKeyVal').textContent = keyVisible ? REAL_KEY : 'isk_live_••••••••••••••••••••••••••••••••';
+}
+function copyApiKey() {
+  navigator.clipboard?.writeText(REAL_KEY).then(()=>showToast('📋','API Key copiada','ok'));
+}
+function regenerateKey() {
+  if(!confirm('¿Regenerar la API Key? Todas las integraciones existentes dejarán de funcionar hasta que actualices la clave.')) return;
+  showToast('🔄','Nueva API Key generada — actualiza tus integraciones','warn');
+}
+
+// ═══════════════════════════════════
+//  LOGO PREVIEW
+// ═══════════════════════════════════
+function previewLogo(input) {
+  if(!input.files?.[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('logoImg');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(input.files[0]);
+  showToast('🖼','Logo actualizado','ok');
+}
+
+// ═══════════════════════════════════
+//  APARIENCIA / THEMES
+// ═══════════════════════════════════
+const THEMES = [
+  { id:'blue',    label:'Azul IDEA',    navy:'#0a1f5c', primary:'#2d6ef5', accent:'#00c2ff', preview:'linear-gradient(135deg,#0a1f5c,#2d6ef5)' },
+  { id:'slate',   label:'Pizarra',      navy:'#0f172a', primary:'#3b82f6', accent:'#38bdf8', preview:'linear-gradient(135deg,#0f172a,#3b82f6)' },
+  { id:'teal',    label:'Teal',         navy:'#042f2e', primary:'#0d9488', accent:'#2dd4bf', preview:'linear-gradient(135deg,#042f2e,#0d9488)' },
+  { id:'violet',  label:'Violeta',      navy:'#2e1065', primary:'#7c3aed', accent:'#a78bfa', preview:'linear-gradient(135deg,#2e1065,#7c3aed)' },
+  { id:'charcoal',label:'Carbón',       navy:'#111827', primary:'#374151', accent:'#9ca3af', preview:'linear-gradient(135deg,#111827,#374151)' },
+];
+let activeThemeId = 'blue';
+
+function buildThemeGrid() {
+  document.getElementById('themeGrid').innerHTML = THEMES.map(t => `
+    <div onclick="selectTheme('${t.id}')" id="theme-${t.id}" style="cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid ${t.id===activeThemeId?'var(--b400)':'var(--bord)'};transition:all .15s;">
+      <div style="height:44px;background:${t.preview};"></div>
+      <div style="padding:6px 8px;background:#fff;">
+        <div style="font-size:10px;font-weight:700;color:var(--t6);text-align:center;">${t.label}</div>
+      </div>
+    </div>`).join('');
+  updateThemePreview(THEMES.find(t=>t.id===activeThemeId));
+}
+
+function selectTheme(id) {
+  activeThemeId = id;
+  const t = THEMES.find(x=>x.id===id);
+  document.querySelectorAll('[id^="theme-"]').forEach(el=>{
+    el.style.borderColor = el.id==='theme-'+id ? 'var(--b400)' : 'var(--bord)';
+  });
+  updateThemePreview(t);
+}
+
+function updateThemePreview(t) {
+  if(!t) return;
+  document.getElementById('prev-sidebar').style.background = t.navy;
+  document.getElementById('prev-nav-active').style.background = t.primary;
+  document.getElementById('prev-btn').style.background = t.primary;
+  document.getElementById('prev-badge').style.background = t.primary;
+  document.getElementById('prev-tag').style.color = t.primary;
+  document.getElementById('prev-tag').style.borderColor = t.primary;
+  document.getElementById('prev-tag').textContent = t.label;
+}
+
+function applyTheme() {
+  const t = THEMES.find(x=>x.id===activeThemeId);
+  document.documentElement.style.setProperty('--navy', t.navy);
+  document.documentElement.style.setProperty('--b500', t.primary);
+  document.documentElement.style.setProperty('--b600', t.primary);
+  document.documentElement.style.setProperty('--cyan', t.accent);
+  showToast('🎨', `Tema "${t.label}" aplicado`, 'ok');
+}
+
+
+function saveSection(section) {
+  const labels = {empresa:'Datos de empresa',inventario:'Parámetros de inventario',
+    alertas:'Configuración de alertas',reportes:'Configuración de reportes',
+    api:'Configuración de API',respaldo:'Configuración de respaldo'};
+  showToast('✓', `${labels[section]||section} guardado`, 'ok');
+}
+
+// ═══════════════════════════════════
+//  EXPORT BACKUP
+// ═══════════════════════════════════
+function exportBackup(type) {
+  const labels = {inventario:'Inventario',movimientos:'Movimientos',ordenes:'Ordenes',
+    usuarios:'Usuarios',completo:'Completo'};
+  const fname = `IDEASCAN_Respaldo_${labels[type]}_${new Date().toISOString().split('T')[0]}.${type==='completo'?'zip':'json'}`;
+  const blob = new Blob([JSON.stringify({tipo:type,fecha:new Date().toISOString(),datos:'[datos del sistema]'},null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname; a.click();
+  showToast('💾',`Respaldo de ${labels[type]} descargado`,'ok');
+}
+
+// ═══════════════════════════════════
+//  MODAL HELPERS
+// ═══════════════════════════════════
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ═══════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════
+function showToast(ico,msg,type='ok'){
+  const t=document.getElementById('toast');
+  const bg={ok:'var(--ok)',warn:'var(--warn)',err:'var(--danger)'};
+  document.getElementById('tIco').textContent=ico;
+  document.getElementById('tIco').style.background=bg[type]||bg.ok;
+  document.getElementById('tMsg').textContent=msg;
+  document.getElementById('tSub').textContent=new Date().toLocaleTimeString('es-MX');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ═══════════════════════════════════
+//  INIT — defer until DOM is ready
+// ═══════════════════════════════════
+// (moved to DOMContentLoaded below)
+
+
+// ═══════════════════════════════════════════
+//  USUARIOS MODULE (embedded in Configuración)
+// ═══════════════════════════════════════════
+
+const U_ROLES = {
+  admin:   { label:'Administrador', ico:'👑', color:'#0d2b7a' },
+  gerente: { label:'Gerente',       ico:'🏭', color:'#0891b2' },
+  op:      { label:'Operador',      ico:'⚙️',  color:'#059669' },
+  client:  { label:'Cliente',       ico:'👤', color:'#7c3aed' },
+};
+const U_MODULES = [
+  { id:'dashboard',  label:'Dashboard',      ico:'📊' },
+  { id:'movements',  label:'Movimientos',     ico:'🔄' },
+  { id:'orders',     label:'Órdenes',         ico:'📋' },
+  { id:'map',        label:'Mapa Almacén',    ico:'🗺️' },
+  { id:'ai_entry',   label:'Entrada con IA',  ico:'🤖' },
+  { id:'reports',    label:'Reportes',        ico:'📑' },
+  { id:'config',     label:'Configuración',   ico:'⚙️' },
+];
+let U_WHS = []; // se llena con almacenes reales
+let U_CLIENTS = []; // se llena con clientes reales
+const U_AV_COLORS = ['#0d2b7a','#0891b2','#059669','#d97706','#7c3aed','#dc2626','#db2777','#0f766e','#1d4ed8','#374151'];
+const U_ACT_TYPES = [
+  {ico:'📥',desc:'Registró entrada de mercancía'},
+  {ico:'📤',desc:'Procesó orden de salida'},
+  {ico:'🔄',desc:'Realizó traslado interno'},
+  {ico:'📦',desc:'Confirmó paquetería'},
+  {ico:'🗺️',desc:'Modificó mapa de almacén'},
+  {ico:'👤',desc:'Inició sesión en el sistema'},
+  {ico:'📑',desc:'Generó reporte de entradas'},
+  {ico:'🔍',desc:'Consultó inventario'},
+];
+
+const U_DEFAULT_PERMS = {
+  admin:   () => Object.fromEntries(U_MODULES.map(m=>[m.id,{ver:true,editar:true,admin:true}])),
+  gerente: () => Object.fromEntries(U_MODULES.map(m=>[m.id,{ver:true,editar:m.id!=='users'&&m.id!=='config',admin:false}])),
+  op:      () => Object.fromEntries(U_MODULES.map(m=>[m.id,{ver:['dashboard','inventory','movements','orders','ai_entry'].includes(m.id),editar:['inventory','movements','orders','ai_entry'].includes(m.id),admin:false}])),
+  client:  () => Object.fromEntries(U_MODULES.map(m=>[m.id,{ver:['dashboard','reports'].includes(m.id),editar:false,admin:false}])),
+};
+
+function uGenActivity(n=6){
+  return Array.from({length:n},()=>{
+    const a=U_ACT_TYPES[Math.floor(Math.random()*U_ACT_TYPES.length)];
+    const h=Math.floor(Math.random()*48);
+    const time=h===0?'Hace unos minutos':h<24?`Hace ${h}h`:`Hace ${Math.floor(h/24)}d`;
+    return {...a,time};
+  });
+}
+
+let uUsers = []; // cargado desde Supabase
+let uNextId=10, uSelectedId=null, uFilterRole='all', uEditingId=null, uModalPerms={}, uModalWhs=new Set(), uSelectedColor=U_AV_COLORS[0];
+
+// Role demo toggle
+function uSetRole(role, el) {
+  document.querySelectorAll('.rs-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  const isAdmin = role === 'admin';
+  document.getElementById('u-gate').classList.toggle('on', !isAdmin);
+  document.getElementById('u-content').classList.toggle('on', isAdmin);
+  if(isAdmin) { uRenderKPIs(); uRenderList(); }
+}
+
+// KPIs
+function uRenderKPIs(){
+  const t=uUsers.length, a=uUsers.filter(u=>u.status==='active').length;
+  const by=r=>uUsers.filter(u=>u.role===r).length;
+  document.getElementById('uKpiStrip').innerHTML=`
+    <div class="u-kpi k1"><div class="u-kpi-top"><div class="u-kpi-ico" style="background:rgba(45,110,245,.09)">👥</div></div><div class="u-kpi-val">${t}</div><div class="u-kpi-lbl">Usuarios totales</div><div class="u-kpi-sub"><strong>${a}</strong> activos · <strong>${t-a}</strong> inactivos</div></div>
+    <div class="u-kpi k2"><div class="u-kpi-top"><div class="u-kpi-ico" style="background:rgba(13,43,122,.09)">👑</div></div><div class="u-kpi-val">${by('admin')+by('gerente')}</div><div class="u-kpi-lbl">Admins / Gerentes</div><div class="u-kpi-sub"><strong>${by('admin')}</strong> admin · <strong>${by('gerente')}</strong> gerentes</div></div>
+    <div class="u-kpi k3"><div class="u-kpi-top"><div class="u-kpi-ico" style="background:rgba(5,150,105,.09)">⚙️</div></div><div class="u-kpi-val">${by('op')}</div><div class="u-kpi-lbl">Operadores</div><div class="u-kpi-sub">Capturistas y operadores</div></div>
+    <div class="u-kpi k4"><div class="u-kpi-top"><div class="u-kpi-ico" style="background:rgba(124,58,237,.09)">👤</div></div><div class="u-kpi-val">${by('client')}</div><div class="u-kpi-lbl">Portales cliente</div><div class="u-kpi-sub">Accesos activos de clientes</div></div>`;
+}
+
+// Filter
+function uSetFilter(role,el){
+  uFilterRole=role;
+  document.querySelectorAll('.u-rpill').forEach(p=>{p.className='u-rpill';});
+  el.className=`u-rpill on ${role}`;
+  uRenderList();
+}
+
+// List
+function uRenderList(){
+  const q=(document.getElementById('uSearch')||{}).value?.toLowerCase()||'';
+  const list=uUsers.filter(u=>{
+    if(uFilterRole!=='all'&&u.role!==uFilterRole)return false;
+    if(q&&!`${u.name} ${u.last} ${u.email}`.toLowerCase().includes(q))return false;
+    return true;
+  });
+  if(!list.length){
+    document.getElementById('uList').innerHTML='<div style="padding:30px;text-align:center;font-size:13px;color:var(--t3)">🔍 Sin resultados</div>';
+    return;
+  }
+  document.getElementById('uList').innerHTML=list.map(u=>{
+    const r=U_ROLES[u.role];
+    const ini=(u.name[0]+(u.last?u.last[0]:'')).toUpperCase();
+    const online=u.lastLogin.startsWith('Hoy');
+    return `<div class="u-row${uSelectedId===u.id?' sel':''}" onclick="uSelectUser(${u.id})">
+      <div class="u-av" style="background:${u.color}">${ini}</div>
+      <div style="min-width:0;flex:1">
+        <div class="u-name-lbl">${u.name} ${u.last}</div>
+        <div class="u-email-lbl" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--b500);font-weight:600;">@${u.username||u.email||'—'}</div>
+        <div style="margin-top:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+          <span class="u-rb ${u.role}">${r.ico} ${r.label}</span>
+          ${u.assignedClient?`<span style="font-size:9px;font-weight:700;color:var(--r-client);background:var(--r-client-bg);padding:2px 7px;border-radius:100px;border:1px solid var(--r-client-bd)">${u.assignedClient}</span>`:''}
+          ${u.status==='inactive'?`<span style="font-size:9px;font-weight:700;color:var(--danger);background:rgba(239,68,68,.08);padding:2px 6px;border-radius:100px;border:1px solid rgba(239,68,68,.2)">Inactivo</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-left:auto;flex-shrink:0">
+        <div class="u-dot ${online?'online':'offline'}"></div>
+        <div style="font-size:9px;color:var(--t3)">${u.lastLogin}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Select user
+function uSelectUser(id){
+  uSelectedId=id;
+  uRenderList();
+  const u=uUsers.find(x=>x.id===id);
+  if(!u)return;
+  document.getElementById('uDcEmpty').style.display='none';
+  document.getElementById('uDcContent').style.display='block';
+  const r=U_ROLES[u.role];
+  const ini=(u.name[0]+(u.last?u.last[0]:'')).toUpperCase();
+  const permsHtml=U_MODULES.map(m=>{
+    const p=u.perms?.[m.id]||{};
+    const chip=(k,lbl)=>`<span class="u-pchip ${p[k]?'on '+k:'off'}">${lbl}</span>`;
+    return `<div class="u-perm-row"><span class="u-perm-name"><span>${m.ico}</span>${m.label}</span><div style="display:flex;gap:3px">${chip('ver','Ver')}${chip('editar','Edit')}${chip('admin','Adm')}</div></div>`;
+  }).join('');
+  const actHtml=u.activity?.slice(0,6).map(a=>`<div class="u-act-item"><div class="u-act-ico">${a.ico}</div><div><div class="u-act-desc">${a.desc}</div><div class="u-act-time">${a.time}</div></div></div>`).join('')||'';
+  document.getElementById('uDcContent').innerHTML=`
+    <div class="u-cover" style="background:linear-gradient(135deg,${u.color}cc,${u.color}66)">
+      <div class="u-cover-av" style="background:${u.color}">${ini}</div>
+      <div style="position:absolute;top:10px;right:12px;display:flex;gap:6px;">
+        <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:11px" onclick="uOpenEdit(${u.id})">✏️ Editar</button>
+        <button class="btn btn-sm" style="background:rgba(239,68,68,.15);color:#fff;border:1px solid rgba(239,68,68,.3);font-size:11px" onclick="uToggleStatus(${u.id})">${u.status==='active'?'⛔ Desactivar':'✅ Activar'}</button>
+      </div>
+    </div>
+    <div class="u-dbody">
+      <div class="u-dname">${u.name} ${u.last}</div>
+      <div class="u-demail">✉ ${u.email}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <span class="u-rb ${u.role}">${r.ico} ${r.label}</span>
+        <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:${u.status==='active'?'rgba(34,199,122,.1)':'rgba(239,68,68,.08)'};color:${u.status==='active'?'#059669':'var(--danger)'};border:1px solid ${u.status==='active'?'rgba(34,199,122,.3)':'rgba(239,68,68,.2)'}">${u.status==='active'?'● Activo':'○ Inactivo'}</span>
+      </div>
+    </div>
+    <div class="u-dsec"><div class="u-dsec-ttl">Información</div>
+      <div class="u-dgrid">
+        <div class="u-dfield"><div class="u-dflbl">Último acceso</div><div class="u-dfval">${u.lastLogin}</div></div>
+        <div class="u-dfield"><div class="u-dflbl">ID usuario</div><div class="u-dfval" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--b600)">USR-${String(u.id).padStart(4,'0')}</div></div>
+        <div class="u-dfield" style="grid-column:1/-1"><div class="u-dflbl">Almacenes asignados</div><div class="u-dfval">${u.whs.join(' · ')||'Sin asignar'}</div></div>
+      </div>
+    </div>
+    <div class="u-dsec"><div class="u-dsec-ttl">Permisos por módulo</div><div>${permsHtml}</div></div>
+    <div class="u-dsec"><div class="u-dsec-ttl">Actividad reciente</div><div>${actHtml}</div></div>
+    <div style="padding:12px 18px 16px;border-top:1px solid var(--bord);display:flex;justify-content:flex-end;gap:7px;">
+      <button class="btn btn-sm" style="background:rgba(239,68,68,.07);color:var(--danger);border:1px solid rgba(239,68,68,.2)" onclick="uDeleteConfirm(${u.id})">🗑 Eliminar</button>
+    </div>`;
+}
+
+// Toggle status
+function uToggleStatus(id){
+  const u=uUsers.find(x=>x.id===id);
+  if(!u)return;
+  u.status=u.status==='active'?'inactive':'active';
+  uRenderList();uRenderKPIs();uSelectUser(id);
+  showToast(u.status==='active'?'✅':'⛔',`${u.name} ${u.status==='active'?'activado':'desactivado'}`,'ok');
+}
+
+// Delete
+function uDeleteConfirm(id){
+  const u=uUsers.find(x=>x.id===id);
+  if(!u)return;
+  if(confirm(`¿Eliminar al usuario "${u.name} ${u.last}"? Esta acción no se puede deshacer.`)){
+    uUsers=uUsers.filter(x=>x.id!==id);
+    uSelectedId=null;
+    document.getElementById('uDcEmpty').style.display='block';
+    document.getElementById('uDcContent').style.display='none';
+    uRenderList();uRenderKPIs();
+    showToast('🗑',`${u.name} eliminado`,'warn');
+  }
+}
+
+// New / Edit Modal
+function uPopulateClientSelect() {
+  const sel = document.getElementById('uF_client');
+  if(!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Sin cliente asignado —</option>' +
+    U_CLIENTS.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+  if(cur) sel.value = cur;
+}
+function uOpenNewUser(){
+  uEditingId=null;
+  uSelectedColor=U_AV_COLORS[0];
+  uModalPerms=U_DEFAULT_PERMS.op();
+  uModalWhs=new Set(['Norte']);
+  document.getElementById('uMTitle').textContent='Nuevo usuario';
+  document.getElementById('uF_username').value='';
+  document.getElementById('uF_name').value='';
+  document.getElementById('uF_last').value='';
+  document.getElementById('uF_password').value='';
+  document.getElementById('uF_role').value='op';
+  document.getElementById('uF_status').value='active';
+  document.getElementById('uF_client').value='';
+  document.getElementById('uPassReq').textContent='*';
+  document.getElementById('uPassHint').style.display='none';
+  document.getElementById('uF_username').removeAttribute('readonly');
+  uBuildModal();
+  document.getElementById('uModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function uOpenEdit(id){
+  const u=uUsers.find(x=>x.id===id);
+  if(!u)return;
+  uEditingId=id;
+  uSelectedColor=u.color;
+  uModalPerms=JSON.parse(JSON.stringify(u.perms));
+  uModalWhs=new Set(u.whs);
+  document.getElementById('uMTitle').textContent=`Editar · ${u.name} ${u.last}`;
+  document.getElementById('uF_username').value=u.username||u.email||'';
+  document.getElementById('uF_name').value=u.name;
+  document.getElementById('uF_last').value=u.last;
+  document.getElementById('uF_password').value='';
+  document.getElementById('uF_role').value=u.role;
+  document.getElementById('uF_status').value=u.status;
+  document.getElementById('uF_client').value=u.assignedClient||'';
+  document.getElementById('uPassReq').textContent='';
+  document.getElementById('uPassHint').style.display='block';
+  document.getElementById('uF_username').setAttribute('readonly','readonly');
+  uBuildModal();
+  document.getElementById('uModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function uBuildModal(){
+  // Colors
+  document.getElementById('uAvColors').innerHTML=U_AV_COLORS.map(c=>`<div class="u-av-color${c===uSelectedColor?' on':''}" style="background:${c}" onclick="uPickColor('${c}',this)"></div>`).join('');
+  // Warehouses
+  document.getElementById('uWhChecks').innerHTML=U_WHS.map(w=>`<div class="u-check-item${uModalWhs.has(w)?' on':''}" onclick="uToggleWh('${w}',this)"><div class="u-check-box">${uModalWhs.has(w)?'✓':''}</div><span class="u-check-lbl">🏭 ${w}</span></div>`).join('');
+  // Client field
+  document.getElementById('uClientWrap').style.display=document.getElementById('uF_role').value==='client'?'block':'none';
+  // Permissions
+  document.getElementById('uPermRows').innerHTML=U_MODULES.map(m=>{
+    const p=uModalPerms[m.id]||{};
+    return `<div class="u-m-perm-row"><span class="u-m-perm-name">${m.ico} ${m.label}</span><div class="u-toggle-grp">
+      <div class="u-ttoggle${p.ver?' on ver':''}" onclick="uTogPerm('${m.id}','ver',this)">Ver</div>
+      <div class="u-ttoggle${p.editar?' on editar':''}" onclick="uTogPerm('${m.id}','editar',this)">Edit</div>
+      <div class="u-ttoggle${p.admin?' on admin':''}" onclick="uTogPerm('${m.id}','admin',this)">Admin</div>
+    </div></div>`;
+  }).join('');
+}
+function uPickColor(c,el){uSelectedColor=c;document.querySelectorAll('.u-av-color').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+function uToggleWh(w,el){if(uModalWhs.has(w)){uModalWhs.delete(w);el.classList.remove('on');el.querySelector('.u-check-box').textContent='';}else{uModalWhs.add(w);el.classList.add('on');el.querySelector('.u-check-box').textContent='✓';}}
+function uTogPerm(mod,key,el){uModalPerms[mod]=uModalPerms[mod]||{};uModalPerms[mod][key]=!uModalPerms[mod][key];el.className=`u-ttoggle${uModalPerms[mod][key]?' on '+key:''}`;} 
+function uOnRoleChange(){document.getElementById('uClientWrap').style.display=document.getElementById('uF_role').value==='client'?'block':'none';const r=document.getElementById('uF_role').value;uModalPerms=U_DEFAULT_PERMS[r]?.()??{};uBuildModal();}
+function uCloseModal(){document.getElementById('uModal').classList.remove('open');document.body.style.overflow='';}
+async function uSaveUser(){
+  const username = document.getElementById('uF_username').value.trim();
+  const name     = document.getElementById('uF_name').value.trim();
+  const password = document.getElementById('uF_password').value;
+
+  // Validaciones
+  if(!username){ showToast('⚠️','El nombre de usuario es obligatorio','warn'); return; }
+  if(!/^[a-zA-Z0-9_]{3,30}$/.test(username)){ showToast('⚠️','Usuario: solo letras, números y guión bajo (3–30 chars)','warn'); return; }
+  if(!name){ showToast('⚠️','El nombre es obligatorio','warn'); return; }
+  if(!uEditingId && !password){ showToast('⚠️','La contraseña es obligatoria para nuevos usuarios','warn'); return; }
+  if(password && (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^a-zA-Z0-9]/.test(password))){
+    showToast('⚠️','Contraseña débil: mín 8 chars, 1 mayúscula, 1 número, 1 símbolo','warn'); return;
+  }
+
+  const btnSave = document.querySelector('.u-mfoot .btn-primary');
+  if(btnSave){ btnSave.disabled=true; btnSave.textContent='Guardando…'; }
+
+  // Email interno: LuisR01 → luisr01@ideascan.wms (invisible para el usuario)
+  const authEmail = toAuthEmail(username);
+
+  try {
+    if(uEditingId){
+      // ── EDITAR usuario existente ──────────────────────────────
+      // 1. Actualizar datos en nuestra tabla ideascan.usuarios
+      const payload = {
+        nombre:   name,
+        apellido: document.getElementById('uF_last').value.trim(),
+        rol:      document.getElementById('uF_role').value,
+        estado:   document.getElementById('uF_status').value === 'active' ? 'active' : 'inactive',
+        color:    uSelectedColor,
+      };
+      await sbFetch('PATCH', `usuarios?id=eq.${uEditingId}`, payload);
+
+      // 2. Si cambió contraseña, actualizar en Supabase Auth
+      //    (requiere que el usuario esté logueado con ese user — en producción
+      //     se haría desde un Edge Function con service_role)
+      if(password){
+        // Guardamos password_hash en nuestra tabla como referencia
+        await sbFetch('PATCH', `usuarios?id=eq.${uEditingId}`, { password_hash: btoa(password) });
+      }
+
+      // Actualizar array local
+      const idx = uUsers.findIndex(u=>u.id===uEditingId);
+      if(idx>=0) uUsers[idx] = {
+        ...uUsers[idx], name, last: payload.apellido,
+        role: payload.rol, status: payload.estado, color: uSelectedColor
+      };
+      showToast('✓', `${name} actualizado`, 'ok');
+
+    } else {
+      // ── CREAR usuario nuevo vía Edge Function (service_role) ──
+      const apellido = document.getElementById('uF_last').value.trim();
+      const rol      = document.getElementById('uF_role').value;
+      const estado   = document.getElementById('uF_status').value === 'active' ? 'active' : 'inactive';
+
+      const result = await userAdminCall({
+        action:   'create',
+        username,
+        password,
+        nombre:   name,
+        apellido,
+        rol,
+        estado,
+        color:    uSelectedColor,
+      });
+
+      const newRow = result.user;
+      uUsers.unshift({
+        id:             newRow?.id,
+        username,
+        name,
+        last:           apellido,
+        role:           rol,
+        status:         estado,
+        color:          uSelectedColor,
+        whs:            [...uModalWhs],
+        assignedClient: document.getElementById('uF_client').value,
+        perms:          JSON.parse(JSON.stringify(uModalPerms)),
+        activity:       uGenActivity(0),
+        lastLogin:      'Nunca',
+      });
+      showToast('✓', `@${username} creado`, 'ok');
+    }
+
+    uCloseModal(); uRenderList(); uRenderKPIs();
+    if(uEditingId) uSelectUser(uEditingId);
+
+  } catch(err){
+    console.error('Error uSaveUser:', err?.message || err);
+    showToast('❌', err?.message || 'Error al guardar. Revisa la consola.', 'warn');
+  } finally {
+    if(btnSave){ btnSave.disabled=false; btnSave.textContent='✓ Guardar usuario'; }
+  }
+}
+function uTogglePass(){
+  const inp=document.getElementById('uF_password');
+  const eye=document.getElementById('uPassEye');
+  inp.type = inp.type==='password'?'text':'password';
+  eye.textContent = inp.type==='password'?'👁':'🙈';
+}
+
+// ── Cargar usuarios desde Supabase ──
+// ── Supabase REST helper (evita DataCloneError del cliente JS) ──
+async function sbFetch(method, table, body, params) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  if(params) Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+  const headers = {
+    'apikey':          SUPA_KEY,
+    'Authorization':   'Bearer ' + SUPA_KEY,
+    'Content-Type':    'application/json',
+    'Accept':          'application/json',
+    'Accept-Profile':  'ideascan',
+    'Content-Profile': 'ideascan',
+    'Prefer':          method === 'POST' ? 'return=representation' : 'return=minimal',
+  };
+  const res = await fetch(url.toString(), {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+  if(!res.ok) throw new Error(data?.message || data?.error || `HTTP ${res.status}`);
+  return data;
+}
+
+async function uLoadFromDB(){
+  try {
+    const data = await sbFetch('GET', 'usuarios', null, {
+      select: '*',
+      order:  'created_at.asc',
+    });
+    if(!data || !data.length){ uRenderKPIs(); uRenderList(); return; }
+    uUsers = data.map(u => ({
+      id:             u.id,
+      username:       u.username || '',
+      name:           u.nombre   || '',
+      last:           u.apellido || '',
+      email:          u.email    || '',
+      role:           u.rol,
+      status:         u.estado   || 'active',
+      color:          u.color    || '#2d6ef5',
+      whs:            ['Norte'],
+      assignedClient: '',
+      perms:          U_DEFAULT_PERMS[u.rol]?.() ?? {},
+      activity:       uGenActivity(Math.floor(Math.random()*8)+1),
+      lastLogin:      u.ultimo_acceso
+                        ? new Date(u.ultimo_acceso).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
+                        : 'Nunca',
+    }));
+    uRenderKPIs();
+    uRenderList();
+  } catch(err) {
+    console.error('Error uLoadFromDB:', err.message);
+    uRenderKPIs(); uRenderList();
+  }
+}
+
+// ── Eliminar usuario en Supabase ──
+async function uDeleteConfirm(id){
+  const u = uUsers.find(x=>x.id===id);
+  if(!u) return;
+  if(!confirm(`¿Eliminar al usuario "\${u.name} \${u.last}" (@\${u.username})? Esta acción no se puede deshacer.`)) return;
+  try { await userAdminCall({ action: 'delete', userId: id }); }
+  catch(e){ showToast('❌','Error al eliminar: '+e.message,'warn'); return; }
+  uUsers = uUsers.filter(x=>x.id!==id);
+  uSelectedId = null;
+  document.getElementById('uDcEmpty').style.display='block';
+  document.getElementById('uDcContent').style.display='none';
+  uRenderList(); uRenderKPIs();
+  showToast('🗑', `\${u.username} eliminado`, 'warn');
+}
+
+// init
+function uInit(){
+  uLoadFromDB();
+}
+
+
+// ═══ SUPABASE: Cargar clientes y almacenes reales ═══
+async function loadConfigFromDB() {
+  const [cls, alms] = await Promise.all([
+    sbFetch('GET', 'clientes', null, { select:'*', order:'nombre.asc' }).catch(()=>[]),
+    sbFetch('GET', 'almacenes', null, { select:'*', order:'nombre.asc' }).catch(()=>[]),
+  ]);
+
+  // Override static clients array with DB data
+  if (Array.isArray(cls) && cls.length) {
+    clients = cls.map(c => ({
+      id: c.id, name: c.nombre, code: c.codigo,
+      color: c.color, emoji: c.emoji || '🔵',
+      contact: c.contacto || '', email: c.email || '',
+      phone: c.telefono || '', active: c.activo,
+    }));
+    renderClients();
+  }
+  if (Array.isArray(alms) && alms.length) {
+    warehouses = alms.map(w => ({
+      id: w.id, name: w.nombre, code: w.codigo,
+      address: w.direccion || '', active: w.activo,
+    }));
+    renderWarehouses();
+  }
+}
+
+// Override saveClient to persist to DB
+const _origSaveClient = typeof saveClient !== 'undefined' ? saveClient : null;
+async function saveClientDB(payload) {
+  if (payload.id && payload.id.includes('-')) {
+    // UUID = existing record
+    await sbFetch('PATCH', `clientes?id=eq.${payload.id}`, {
+      nombre: payload.name, codigo: payload.code,
+      color: payload.color, email: payload.email,
+      contacto: payload.contact, telefono: payload.phone,
+      activo: payload.active,
+    }).catch(e => console.error('Error updating cliente:', e.message));
+  } else {
+    await sbFetch('POST', 'clientes', {
+      nombre: payload.name, codigo: payload.code || payload.name.substring(0,8).toUpperCase(),
+      color: payload.color || '#2d6ef5', email: payload.email,
+      contacto: payload.contact, telefono: payload.phone, activo: true,
+    }).catch(e => console.error('Error inserting cliente:', e.message));
+  }
+  await loadConfigFromDB();
+}
+
+
+// ═══════════════════════════════════
+//  SINGLE DOMContentLoaded init
+// ═══════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderClients();
+  renderWarehouses();
+  renderIntegrations();
+  buildThemeGrid();
+  uInit();
+  loadConfigFromDB();
+});
+</script>
+<script>
+// ── Sidebar toggle ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('s

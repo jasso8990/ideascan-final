@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDEA Scan — Inventario</title>
+<link rel="icon" type="image/png" href="/mnt/user-data/uploads/image__1_.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-900: #0a1f5c;
+  --blue-800: #0d2b7a;
+  --blue-700: #1a3fa3;
+  --blue-600: #1a4dbf;
+  --blue-500: #2d6ef5;
+  --blue-400: #5b9bf8;
+  --blue-300: #93c0fb;
+  --blue-200: #c5dcfd;
+  --blue-100: #ddeeff;
+  --blue-50:  #f0f6ff;
+  --cyan:     #00c2ff;
+  --sidebar-bg: #0a1f5c;
+  --sidebar-w:  240px;
+  --topbar-h:   60px;
+  --white:   #ffffff;
+  --surface: #f4f8ff;
+  --border:  #e4eaf8;
+  --text-900:#0a1f5c;
+  --text-600:#3a5aad;
+  --text-400:#6b83c4;
+  --text-300:#a0b3d8;
+  --success: #22c77a;
+  --warning: #f59e0b;
+  --danger:  #ef4444;
+  --info:    #00c2ff;
+  --shadow-sm: 0 1px 4px rgba(10,31,92,0.06);
+  --shadow-md: 0 4px 16px rgba(10,31,92,0.10);
+  --shadow-lg: 0 8px 32px rgba(10,31,92,0.14);
+  --radius: 14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--text-900);overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* ── LAYOUT ── */
+.app-shell{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;transition:transform .3s ease;overflow-y:auto;overflow-x:hidden;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sidebar-logo{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,0.3);}
+.sidebar-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.sidebar-brand{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:900;color:white;letter-spacing:-.3px;line-height:1;}
+.sidebar-brand em{font-style:normal;color:var(--cyan);}
+.sidebar-version{font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+.sidebar-user{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.07);cursor:pointer;transition:background .15s;}
+.sidebar-user:hover{background:rgba(255,255,255,0.04);}
+.user-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--blue-600),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);}
+.user-role{font-size:10px;color:rgba(255,255,255,0.35);margin-top:1px;}
+.user-chevron{margin-left:auto;color:rgba(255,255,255,0.25);font-size:11px;}
+.nav-label{padding:18px 18px 8px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 18px;margin:1px 8px;border-radius:10px;cursor:pointer;transition:background .15s;position:relative;text-decoration:none;}
+.nav-item:hover{background:rgba(255,255,255,0.06);}
+.nav-item.active{background:linear-gradient(90deg,rgba(45,110,245,0.35),rgba(45,110,245,0.15));}
+.nav-item.active::before{content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--cyan);border-radius:0 2px 2px 0;}
+.nav-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(255,255,255,0.05);transition:background .15s;}
+.nav-item.active .nav-icon{background:rgba(45,110,245,0.4);}
+.nav-item:hover .nav-icon{background:rgba(255,255,255,0.1);}
+.nav-text{font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);}
+.nav-item.active .nav-text{color:white;font-weight:600;}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--danger);color:white;}
+.nav-badge.info{background:var(--blue-500);}
+.sidebar-footer{margin-top:auto;padding:14px 8px;border-top:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{height:var(--topbar-h);background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;gap:16px;box-shadow:var(--shadow-sm);}
+.topbar-hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:4px;}
+.topbar-hamburger span{width:20px;height:2px;background:var(--blue-700);border-radius:2px;display:block;}
+.topbar-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:800;color:var(--text-900);letter-spacing:-.3px;}
+.topbar-breadcrumb{font-size:13px;color:var(--text-300);}
+.topbar-breadcrumb span{color:var(--blue-500);}
+.topbar-search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;width:220px;transition:border-color .15s,box-shadow .15s;}
+.topbar-search:focus-within{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.1);}
+.topbar-search input{border:none;background:none;outline:none;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;width:100%;}
+.topbar-search input::placeholder{color:var(--text-300);}
+.topbar-actions{display:flex;align-items:center;gap:8px;}
+.topbar-btn{width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background .15s,border-color .15s;position:relative;}
+.topbar-btn:hover{background:var(--blue-50);border-color:var(--blue-200);}
+.topbar-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid white;}
+.topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--blue-700),var(--blue-400));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;cursor:pointer;flex-shrink:0;border:2px solid var(--blue-200);}
+
+/* ── PAGE CONTENT ── */
+.page-content{padding:24px 28px 40px;flex:1;}
+
+/* ── PAGE HEADER ── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap;}
+.page-header-left{}
+.page-title{font-family:'Exo 2',sans-serif;font-size:24px;font-weight:900;color:var(--text-900);letter-spacing:-.5px;margin-bottom:4px;}
+.page-subtitle{font-size:13px;color:var(--text-400);}
+.page-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:white;box-shadow:0 4px 14px rgba(45,110,245,0.3);}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(45,110,245,0.4);transform:translateY(-1px);}
+.btn-ghost{background:white;color:var(--text-600);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--blue-50);border-color:var(--blue-300);}
+.btn-success{background:linear-gradient(135deg,#16a34a,var(--success));color:white;box-shadow:0 4px 14px rgba(34,199,122,0.25);}
+.btn-success:hover{box-shadow:0 6px 20px rgba(34,199,122,0.35);transform:translateY(-1px);}
+.btn-danger{background:linear-gradient(135deg,#dc2626,var(--danger));color:white;box-shadow:0 4px 14px rgba(239,68,68,0.25);}
+.btn-danger:hover{box-shadow:0 6px 20px rgba(239,68,68,0.35);transform:translateY(-1px);}
+.btn-info{background:linear-gradient(135deg,#0284c7,var(--cyan));color:white;box-shadow:0 4px 14px rgba(0,194,255,0.25);}
+.btn-info:hover{transform:translateY(-1px);}
+.btn-sm{padding:7px 13px;font-size:12px;border-radius:8px;}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;}
+.kpi-mini{background:white;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s;cursor:default;}
+.kpi-mini:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.kpi-mini-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.kpi-mini-val{font-family:'Exo 2',sans-serif;font-size:22px;font-weight:900;color:var(--text-900);line-height:1;}
+.kpi-mini-label{font-size:11px;color:var(--text-400);margin-top:2px;}
+
+/* ── FILTERS BAR ── */
+.filters-bar{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow-sm);}
+.filters-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.filter-group{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.filter-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-300);}
+.filter-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;min-width:0;}
+.filter-input:focus{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.08);}
+.filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 28px 8px 12px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b83c4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color .15s;}
+.filter-select:focus{border-color:var(--blue-400);}
+.filter-search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1;max-width:300px;}
+.filter-search:focus-within{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.08);}
+.filter-search input{border:none;background:none;outline:none;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;width:100%;}
+.filter-search input::placeholder{color:var(--text-300);}
+.filter-divider{width:1px;height:32px;background:var(--border);flex-shrink:0;}
+.filter-tag-row{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+.active-filter-tag{display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);border:1px solid var(--blue-200);color:var(--blue-600);font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;}
+.filter-tag-close{cursor:pointer;font-size:12px;color:var(--blue-400);line-height:1;}
+.filter-tag-close:hover{color:var(--danger);}
+.filter-results-count{font-size:12px;color:var(--text-300);margin-left:auto;}
+
+/* ── CLIENT COLOR DOTS ── */
+.client-dot{display:inline-flex;align-items:center;gap:6px;}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── TABLE ── */
+.table-card{background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
+.table-card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.table-card-title{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:var(--text-900);}
+.table-card-sub{font-size:11px;color:var(--text-300);margin-top:2px;}
+.table-actions{display:flex;gap:6px;align-items:center;}
+.tbl-btn{padding:6px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-600);font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.tbl-btn:hover{background:var(--blue-50);border-color:var(--blue-300);color:var(--blue-600);}
+.tbl-btn.active{background:var(--blue-500);border-color:var(--blue-500);color:white;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-300);background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;}
+thead th:hover{color:var(--blue-500);}
+thead th.sorted{color:var(--blue-500);}
+thead th .sort-icon{margin-left:4px;opacity:.5;font-size:9px;}
+thead th.sorted .sort-icon{opacity:1;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s;cursor:default;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--blue-50);}
+tbody tr.selected{background:rgba(45,110,245,0.04);border-left:3px solid var(--blue-500);}
+td{padding:11px 14px;color:var(--text-600);vertical-align:middle;}
+.td-check{width:32px;padding:11px 8px 11px 14px;}
+.td-check input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue-500);cursor:pointer;}
+.td-sku{font-family:monospace;font-size:12px;font-weight:700;color:var(--blue-700);background:var(--blue-50);padding:3px 8px;border-radius:5px;border:1px solid var(--blue-100);white-space:nowrap;}
+.td-part{font-size:12px;color:var(--text-600);font-family:monospace;}
+.td-desc{font-size:12px;font-weight:600;color:var(--text-900);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.td-client{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;}
+.td-location{display:flex;flex-direction:column;gap:2px;}
+.td-location-main{font-size:11px;font-weight:700;color:var(--blue-700);background:var(--blue-50);padding:2px 8px;border-radius:5px;border:1px solid var(--blue-100);display:inline-block;}
+.td-location-bin{font-size:10px;color:var(--text-300);margin-top:2px;}
+.td-qty{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:900;color:var(--text-900);}
+.td-bultos{font-family:'Exo 2',sans-serif;font-size:15px;font-weight:700;color:var(--text-600);}
+.td-carrier{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;background:var(--surface);border:1px solid var(--border);white-space:nowrap;}
+.td-actions{display:flex;gap:4px;white-space:nowrap;}
+.td-action-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all .15s;color:var(--text-400);}
+.td-action-btn:hover{border-color:var(--blue-300);background:var(--blue-50);color:var(--blue-500);}
+.td-action-btn.danger:hover{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.05);color:var(--danger);}
+.td-action-btn.success:hover{border-color:rgba(34,199,122,0.3);background:rgba(34,199,122,0.05);color:var(--success);}
+
+/* ── PAGINATION ── */
+.pagination{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.page-info{font-size:12px;color:var(--text-300);}
+.page-info strong{color:var(--text-600);}
+.page-btns{display:flex;gap:4px;}
+.page-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text-600);}
+.page-btn:hover{background:var(--blue-50);border-color:var(--blue-300);color:var(--blue-500);}
+.page-btn.active{background:var(--blue-500);border-color:var(--blue-500);color:white;}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,31,92,0.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:20px;box-shadow:0 24px 80px rgba(10,31,92,0.25);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s;display:flex;flex-direction:column;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:22px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;position:sticky;top:0;background:white;z-index:1;border-radius:20px 20px 0 0;}
+.modal-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.modal-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:800;color:var(--text-900);letter-spacing:-.3px;}
+.modal-subtitle{font-size:12px;color:var(--text-400);margin-top:2px;}
+.modal-close{margin-left:auto;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-400);transition:all .15s;flex-shrink:0;}
+.modal-close:hover{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);color:var(--danger);}
+.modal-body{padding:20px 24px;flex:1;}
+.modal-footer{padding:16px 24px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0;position:sticky;bottom:0;background:white;border-radius:0 0 20px 20px;}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid.cols3{grid-template-columns:1fr 1fr 1fr;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-400);}
+.form-label .req{color:var(--danger);}
+.form-input{background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;width:100%;}
+.form-input:focus{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.08);}
+.form-select{background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 32px 10px 13px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b83c4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:border-color .15s;width:100%;}
+.form-select:focus{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.08);}
+.form-hint{font-size:10px;color:var(--text-300);margin-top:2px;}
+.form-divider{grid-column:1/-1;height:1px;background:var(--border);margin:4px 0;}
+.form-section-title{grid-column:1/-1;font-family:'Exo 2',sans-serif;font-size:13px;font-weight:800;color:var(--text-600);letter-spacing:.3px;margin-top:4px;}
+.qty-field{display:flex;align-items:center;gap:0;}
+.qty-btn{width:36px;height:40px;background:var(--blue-50);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;font-weight:700;color:var(--blue-600);transition:background .15s;flex-shrink:0;}
+.qty-btn:first-child{border-radius:9px 0 0 9px;border-right:none;}
+.qty-btn:last-child{border-radius:0 9px 9px 0;border-left:none;}
+.qty-btn:hover{background:var(--blue-100);}
+.qty-input{flex:1;border:1.5px solid var(--border);border-radius:0;padding:10px 8px;font-size:16px;font-weight:700;font-family:'Exo 2',sans-serif;color:var(--text-900);text-align:center;outline:none;background:white;}
+.qty-input:focus{border-color:var(--blue-400);}
+.product-preview-box{background:var(--blue-50);border:1px solid var(--blue-200);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ppb-icon{width:38px;height:38px;background:var(--blue-100);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ppb-sku{font-family:monospace;font-size:11px;font-weight:700;color:var(--blue-500);}
+.ppb-name{font-size:13px;font-weight:700;color:var(--text-900);}
+.ppb-stock{margin-left:auto;text-align:right;}
+.ppb-qty{font-family:'Exo 2',sans-serif;font-size:22px;font-weight:900;color:var(--blue-500);line-height:1;}
+.ppb-qty-label{font-size:9px;color:var(--text-300);text-transform:uppercase;letter-spacing:1px;}
+.result-preview{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.rp-label{font-size:11px;color:var(--text-400);}
+.rp-value{font-family:'Exo 2',sans-serif;font-size:20px;font-weight:900;}
+.rp-value.in{color:var(--success);}
+.rp-value.out{color:var(--danger);}
+.rp-value.mov{color:var(--info);}
+.history-list{display:flex;flex-direction:column;gap:6px;}
+.history-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);}
+.hi-type{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.hi-desc{font-size:12px;font-weight:600;color:var(--text-900);}
+.hi-meta{font-size:10px;color:var(--text-300);margin-top:2px;}
+.hi-qty{margin-left:auto;font-family:'Exo 2',sans-serif;font-size:15px;font-weight:800;flex-shrink:0;}
+
+/* ── MULTI-SELECT BAR ── */
+.bulk-bar{background:var(--blue-900);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:16px;margin-bottom:14px;box-shadow:0 4px 20px rgba(10,31,92,0.3);animation:slideDown .2s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.bulk-count{font-size:13px;font-weight:700;color:white;}
+.bulk-count span{color:var(--cyan);}
+.bulk-actions{display:flex;gap:8px;margin-left:auto;}
+.bulk-btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.bulk-btn:hover{background:rgba(255,255,255,0.15);}
+.bulk-btn.danger{border-color:rgba(239,68,68,0.3);color:#fca5a5;}
+.bulk-close{margin-left:8px;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;line-height:1;transition:color .15s;}
+.bulk-close:hover{color:white;}
+
+/* ── SIDEBAR OVERLAY ── */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){.kpi-strip{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main{margin-left:0;}
+  .topbar-hamburger{display:flex;}
+  .topbar-search{width:160px;}
+  .kpi-strip{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+  .page-content{padding:16px 16px 32px;}
+  .topbar{padding:0 16px;}
+  .topbar-search{display:none;}
+  .kpi-strip{grid-template-columns:1fr 1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .form-grid.cols3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="/mnt/user-data/uploads/image__1_.png" alt="IDEA Scan" onerror="this.parentNode.style.background='#1a4dbf';this.style.display='none'">
+      </div>
+      <div>
+        <div class="sidebar-brand">IDEA <em>Scan</em></div>
+        <div class="sidebar-version">v2.0 · WMS</div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">JR</div>
+      <div><div class="user-name">Juan Rodríguez</div><div class="user-role">Warehouse Manager</div></div>
+      <div class="user-chevron">▾</div>
+    </div>
+            <div class="nav-label">Principal</div>
+    <a class="nav-item" href="ideascan-dashboard.html">
+      <div class="nav-icon">📊</div>
+      <span class="nav-text">Dashboard</span>
+    </a>
+    <a class="nav-item active" href="ideascan-inventory.html">
+      <div class="nav-icon">📦</div>
+      <span class="nav-text">Inventario</span>
+      <span class="nav-badge info">3,842</span>
+    </a>
+    <a class="nav-item" href="ideascan-movements.html">
+      <div class="nav-icon">🔄</div>
+      <span class="nav-text">Movimientos</span>
+    </a>
+    <a class="nav-item" href="ideascan-orders.html">
+      <div class="nav-icon">📋</div>
+      <span class="nav-text">Órdenes</span>
+      <span class="nav-badge">12</span>
+    </a>
+    <a class="nav-item" href="ideascan-map.html">
+      <div class="nav-icon">🗺️</div>
+      <span class="nav-text">Mapa Almacén</span>
+    </a>
+    <div class="nav-label">IA</div>
+    <a class="nav-item ai-btn" href="ideascan-ai-entry.html">
+      <div class="nav-icon">🤖</div>
+      <span class="nav-text">Entrada con IA</span>
+    </a>
+    <div class="nav-label">Reportes</div>
+    <a class="nav-item" href="ideascan-reports.html">
+      <div class="nav-icon">📑</div>
+      <span class="nav-text">Reportes</span>
+    </a>
+    <a class="nav-item" href="#">
+      <div class="nav-icon">🔔</div>
+      <span class="nav-text">Alertas</span>
+      <span class="nav-badge">3</span>
+    </a>
+    <div class="nav-label">Sistema</div>
+    <a class="nav-item" href="ideascan-config.html">
+      <div class="nav-icon">⚙️</div>
+      <span class="nav-text">Configuración</span>
+    </a>
+
+
+    <div class="sidebar-footer">
+      <a class="nav-item" href="#"><div class="nav-icon">🚪</div><span class="nav-text">Cerrar sesión</span></a>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <div class="main">
+    <div class="topbar">
+      <button class="topbar-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+      <div>
+        <div class="topbar-title">Inventario</div>
+        <div class="topbar-breadcrumb">IDEA Scan · <span>Inventario</span></div>
+      </div>
+      <div class="topbar-search">
+        <span style="font-size:13px;color:var(--text-300)">🔍</span>
+        <input type="text" placeholder="Buscar SKU, producto, N° parte..." id="globalSearch" oninput="filterTable()">
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-btn" title="Escanear">📷</div>
+        <div class="topbar-btn" title="Notificaciones">🔔<div class="topbar-notif-dot"></div></div>
+        <div class="topbar-btn" title="Ayuda">❓</div>
+        <div class="topbar-avatar">JR</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <div class="page-title">📦 Inventario</div>
+          <div class="page-subtitle">Gestión multi-cliente · 3PL · 3,842 SKUs registrados</div>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-success" onclick="openModal('inModal')">📥 Registrar Entrada</button>
+          <button class="btn btn-primary" onclick="location.href='ideascan-ai-entry.html'" style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">🤖 Entrada con IA</button>
+        </div>
+      </div>
+
+      <!-- KPI STRIP -->
+      <div class="kpi-strip">
+        <div class="kpi-mini">
+          <div class="kpi-mini-icon" style="background:rgba(45,110,245,0.1)">📦</div>
+          <div><div class="kpi-mini-val">3,842</div><div class="kpi-mini-label">SKUs totales</div></div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-icon" style="background:rgba(34,199,122,0.1)">🏢</div>
+          <div><div class="kpi-mini-val">6</div><div class="kpi-mini-label">Clientes activos</div></div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-icon" style="background:rgba(0,194,255,0.1)">📊</div>
+          <div><div class="kpi-mini-val">18,420</div><div class="kpi-mini-label">Unidades totales</div></div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-icon" style="background:rgba(245,158,11,0.1)">📦</div>
+          <div><div class="kpi-mini-val">2,314</div><div class="kpi-mini-label">Bultos totales</div></div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-icon" style="background:rgba(139,92,246,0.1)">🚚</div>
+          <div><div class="kpi-mini-val">84%</div><div class="kpi-mini-label">Ocupación almacén</div></div>
+        </div>
+      </div>
+
+      <!-- FILTERS BAR -->
+      <div class="filters-bar">
+        <div class="filters-row">
+          <div class="filter-group">
+            <div class="filter-label">Cliente</div>
+            <select class="filter-select" id="filterClient" onchange="filterTable()" style="min-width:160px;">
+              <option value="">Todos los clientes</option>
+              <option value="TechCorp">🔵 TechCorp S.A.</option>
+              <option value="ModaPlus">🟣 ModaPlus</option>
+              <option value="FreshFood">🟢 FreshFood Co.</option>
+              <option value="AutoParts">🟠 AutoParts Mx</option>
+              <option value="HomeDeco">🩷 HomeDeco</option>
+              <option value="MedSupply">🔴 MedSupply</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">Zona</div>
+            <select class="filter-select" id="filterZone" onchange="filterTable()" style="min-width:120px;">
+              <option value="">Todas las zonas</option>
+              <option value="A">Zona A</option>
+              <option value="B">Zona B</option>
+              <option value="C">Zona C</option>
+              <option value="D">Zona D</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">Transportista</div>
+            <select class="filter-select" id="filterCarrier" onchange="filterTable()" style="min-width:140px;">
+              <option value="">Todos los carriers</option>
+              <option value="DHL">DHL</option>
+              <option value="FedEx">FedEx</option>
+              <option value="Estafeta">Estafeta</option>
+              <option value="Redpack">Redpack</option>
+              <option value="UPS">UPS</option>
+            </select>
+          </div>
+          <div class="filter-divider"></div>
+          <div class="filter-group" style="flex:1;">
+            <div class="filter-label">Buscar</div>
+            <div class="filter-search">
+              <span style="font-size:13px;color:var(--text-300)">🔍</span>
+              <input type="text" placeholder="SKU, descripción, N° parte..." id="tableSearch" oninput="filterTable()">
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:6px;">
+            <button class="tbl-btn" onclick="clearFilters()">✕ Limpiar</button>
+          </div>
+        </div>
+        <div class="filter-tag-row" id="activeTags">
+          <span style="font-size:11px;color:var(--text-300);">Filtros activos:</span>
+          <span class="filter-results-count" id="resultsCount">Mostrando <strong>12</strong> de 3,842 registros</span>
+        </div>
+      </div>
+
+      <!-- BULK BAR (shown when rows selected) -->
+      <div class="bulk-bar" id="bulkBar" style="display:none;">
+        <span class="bulk-count"><span id="bulkCount">0</span> registros seleccionados</span>
+        <div class="bulk-actions">
+        </div>
+        <span class="bulk-close" onclick="clearSelection()">✕</span>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div>
+            <div class="table-card-title">Registros de Inventario</div>
+            <div class="table-card-sub">Vista multi-cliente · Ordenar por columna</div>
+          </div>
+          <div class="table-actions">
+            <button class="tbl-btn active" id="viewAll" onclick="setView('all',this)">Todos</button>
+            <button class="tbl-btn" id="viewToday" onclick="setView('today',this)">Hoy</button>
+            <button class="tbl-btn" onclick="openModal('colModal')">⚙️ Columnas</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="invTable">
+            <thead>
+              <tr>
+                <th class="td-check"><input type="checkbox" id="checkAll" onchange="toggleAll(this)"></th>
+                <th onclick="sortTable('sku')">SKU / Código <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('part')">N° Parte <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('desc')">Descripción <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('client')">Cliente <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('location')">Ubicación <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('qty')" class="sorted">Cantidad <span class="sort-icon">↓</span></th>
+                <th onclick="sortTable('bultos')">Bultos <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('carrier')">Carrier <span class="sort-icon">↕</span></th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="invBody">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <div class="page-info">Mostrando <strong id="pageFrom">1</strong>–<strong id="pageTo">12</strong> de <strong id="pageTotal">3,842</strong> registros</div>
+          <div class="page-btns">
+            <button class="page-btn" disabled>‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span style="padding:0 4px;color:var(--text-300);font-size:12px;">…</span>
+            <button class="page-btn">320</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+</div><!-- /app-shell -->
+
+<!-- ═══════════════════════════════════
+     MODAL: REGISTRAR ENTRADA
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="inModal" onclick="handleOverlayClick(event,'inModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" style="background:rgba(34,199,122,0.12)">📥</div>
+      <div><div class="modal-title">Registrar Entrada</div><div class="modal-subtitle">Recepción de mercancía en almacén</div></div>
+      <div class="modal-close" onclick="closeModal('inModal')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Cliente <span class="req">*</span></label>
+          <select class="form-select">
+            <option>Seleccionar cliente...</option>
+            <option>🔵 TechCorp S.A.</option>
+            <option>🟣 ModaPlus</option>
+            <option>🟢 FreshFood Co.</option>
+            <option>🟠 AutoParts Mx</option>
+            <option>🩷 HomeDeco</option>
+            <option>🔴 MedSupply</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">SKU / Código <span class="req">*</span></label>
+          <input class="form-input" type="text" placeholder="Ej. SKU-00412">
+          <span class="form-hint">O escanea el código con la cámara 📷</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">N° de Parte</label>
+          <input class="form-input" type="text" placeholder="Ej. PART-7890-A">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Descripción del producto</label>
+          <input class="form-input" type="text" placeholder="Ej. Caja Industrial A4 – Embalaje reforzado">
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-section-title">Cantidades</div>
+        <div class="form-group">
+          <label class="form-label">Cantidad de unidades <span class="req">*</span></label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('inQty',-1)">−</div>
+            <input class="qty-input" id="inQty" type="number" value="1" min="1">
+            <div class="qty-btn" onclick="changeQty('inQty',1)">+</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Número de bultos</label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('inBultos',-1)">−</div>
+            <input class="qty-input" id="inBultos" type="number" value="1" min="1">
+            <div class="qty-btn" onclick="changeQty('inBultos',1)">+</div>
+          </div>
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-section-title">Ubicación & Logística</div>
+        <div class="form-group">
+          <label class="form-label">Zona <span class="req">*</span></label>
+          <select class="form-select">
+            <option>Seleccionar zona...</option>
+            <option>Zona A</option><option>Zona B</option>
+            <option>Zona C</option><option>Zona D</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estante / Bin</label>
+          <input class="form-input" type="text" placeholder="Ej. Estante 2 · Bin 14">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Transportista (Carrier)</label>
+          <select class="form-select">
+            <option>Sin carrier</option>
+            <option>DHL</option><option>FedEx</option>
+            <option>Estafeta</option><option>Redpack</option><option>UPS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Guía / Tracking</label>
+          <input class="form-input" type="text" placeholder="Número de guía">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Notas</label>
+          <input class="form-input" type="text" placeholder="Observaciones opcionales...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('inModal')">Cancelar</button>
+      <button class="btn btn-success btn-sm" onclick="closeModal('inModal')">✓ Confirmar entrada</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL: REGISTRAR SALIDA
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="outModal" onclick="handleOverlayClick(event,'outModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" style="background:rgba(239,68,68,0.1)">📤</div>
+      <div><div class="modal-title">Registrar Salida</div><div class="modal-subtitle">Despacho o retiro de mercancía</div></div>
+      <div class="modal-close" onclick="closeModal('outModal')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="product-preview-box">
+        <div class="ppb-icon">📦</div>
+        <div>
+          <div class="ppb-sku">SKU-00412</div>
+          <div class="ppb-name">Caja Industrial A4</div>
+          <div style="font-size:10px;color:var(--text-300);margin-top:2px;">Zona B-3 · Estante 2 · 🔵 TechCorp S.A.</div>
+        </div>
+        <div class="ppb-stock">
+          <div class="ppb-qty">248</div>
+          <div class="ppb-qty-label">en stock</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">SKU / Código <span class="req">*</span></label>
+          <input class="form-input" type="text" value="SKU-00412">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cliente</label>
+          <select class="form-select"><option selected>🔵 TechCorp S.A.</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cantidad a retirar <span class="req">*</span></label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('outQty',-1)">−</div>
+            <input class="qty-input" id="outQty" type="number" value="10" min="1" max="248" oninput="updateOutPreview()">
+            <div class="qty-btn" onclick="changeQty('outQty',1)">+</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bultos a retirar</label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('outBultos',-1)">−</div>
+            <input class="qty-input" id="outBultos" type="number" value="1" min="1">
+            <div class="qty-btn" onclick="changeQty('outBultos',1)">+</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carrier de salida</label>
+          <select class="form-select">
+            <option>Sin asignar</option>
+            <option selected>DHL</option><option>FedEx</option>
+            <option>Estafeta</option><option>Redpack</option><option>UPS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">N° Orden / Guía</label>
+          <input class="form-input" type="text" placeholder="Referencia de salida">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Motivo de salida</label>
+          <select class="form-select">
+            <option>Despacho a cliente</option>
+            <option>Traslado externo</option>
+            <option>Devolución</option>
+            <option>Merma / Daño</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-preview">
+        <div><div class="rp-label">Stock resultante</div></div>
+        <div class="rp-value out" id="outResultQty">238 unidades</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('outModal')">Cancelar</button>
+      <button class="btn btn-danger btn-sm" onclick="closeModal('outModal')">✓ Confirmar salida</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL: TRASLADAR
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="moveModal" onclick="handleOverlayClick(event,'moveModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" style="background:rgba(0,194,255,0.1)">🔄</div>
+      <div><div class="modal-title">Trasladar entre Zonas</div><div class="modal-subtitle">Mover mercancía dentro del almacén</div></div>
+      <div class="modal-close" onclick="closeModal('moveModal')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">SKU / Código <span class="req">*</span></label>
+          <input class="form-input" type="text" placeholder="Ej. SKU-00412">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cliente</label>
+          <select class="form-select">
+            <option>Todos los clientes</option>
+            <option>🔵 TechCorp S.A.</option>
+            <option>🟣 ModaPlus</option>
+            <option>🟢 FreshFood Co.</option>
+            <option>🟠 AutoParts Mx</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cantidad a trasladar <span class="req">*</span></label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('movQty',-1)">−</div>
+            <input class="qty-input" id="movQty" type="number" value="1" min="1">
+            <div class="qty-btn" onclick="changeQty('movQty',1)">+</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bultos a trasladar</label>
+          <div class="qty-field">
+            <div class="qty-btn" onclick="changeQty('movBultos',-1)">−</div>
+            <input class="qty-input" id="movBultos" type="number" value="1" min="1">
+            <div class="qty-btn" onclick="changeQty('movBultos',1)">+</div>
+          </div>
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-section-title">Origen → Destino</div>
+        <div class="form-group">
+          <label class="form-label">Zona origen <span class="req">*</span></label>
+          <select class="form-select">
+            <option>Zona A</option><option selected>Zona B</option>
+            <option>Zona C</option><option>Zona D</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zona destino <span class="req">*</span></label>
+          <select class="form-select">
+            <option>Zona A</option><option>Zona B</option>
+            <option selected>Zona C</option><option>Zona D</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estante / Bin origen</label>
+          <input class="form-input" type="text" placeholder="Ej. Estante 2 · Bin 14">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estante / Bin destino</label>
+          <input class="form-input" type="text" placeholder="Ej. Estante 4 · Bin 02">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Motivo del traslado</label>
+          <input class="form-input" type="text" placeholder="Ej. Reorganización por temporada, espacio, etc.">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('moveModal')">Cancelar</button>
+      <button class="btn btn-info btn-sm" onclick="closeModal('moveModal')">✓ Confirmar traslado</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL: HISTORIAL
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="histModal" onclick="handleOverlayClick(event,'histModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" style="background:var(--blue-50)">📋</div>
+      <div><div class="modal-title">Historial del Producto</div><div class="modal-subtitle" id="histSubtitle">SKU-00412 · Caja Industrial A4</div></div>
+      <div class="modal-close" onclick="closeModal('histModal')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="product-preview-box" style="margin-bottom:16px;">
+        <div class="ppb-icon">📦</div>
+        <div>
+          <div class="ppb-sku">SKU-00412</div>
+          <div class="ppb-name">Caja Industrial A4</div>
+          <div style="font-size:10px;color:var(--text-300);margin-top:2px;">N° Parte: PART-7890-A · 🔵 TechCorp S.A.</div>
+        </div>
+        <div class="ppb-stock">
+          <div class="ppb-qty">248</div>
+          <div class="ppb-qty-label">en stock</div>
+        </div>
+      </div>
+      <div class="history-list">
+        <div class="history-item">
+          <div class="hi-type" style="background:rgba(34,199,122,0.1)">📥</div>
+          <div><div class="hi-desc">Entrada — Recepción Pallet #7</div><div class="hi-meta">M. García · Zona B-3 · DHL · Guía 1Z9999W99999999999</div><div class="hi-meta" style="margin-top:2px;">Hoy 09:42 AM</div></div>
+          <div class="hi-qty" style="color:var(--success)">+60</div>
+        </div>
+        <div class="history-item">
+          <div class="hi-type" style="background:rgba(239,68,68,0.08)">📤</div>
+          <div><div class="hi-desc">Salida — Orden #891</div><div class="hi-meta">J. Ruiz · Zona B-3 · FedEx · Guía 7489234891</div><div class="hi-meta" style="margin-top:2px;">Ayer 15:20 PM</div></div>
+          <div class="hi-qty" style="color:var(--danger)">−18</div>
+        </div>
+        <div class="history-item">
+          <div class="hi-type" style="background:rgba(0,194,255,0.08)">🔄</div>
+          <div><div class="hi-desc">Traslado — A-2 → B-3</div><div class="hi-meta">L. Pérez · Reorganización temporada</div><div class="hi-meta" style="margin-top:2px;">Hace 3 días</div></div>
+          <div class="hi-qty" style="color:var(--info)">×24</div>
+        </div>
+        <div class="history-item">
+          <div class="hi-type" style="background:rgba(34,199,122,0.1)">📥</div>
+          <div><div class="hi-desc">Entrada — Recepción inicial</div><div class="hi-meta">Admin · Zona B-3 · Estafeta</div><div class="hi-meta" style="margin-top:2px;">14 Feb 2026</div></div>
+          <div class="hi-qty" style="color:var(--success)">+200</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('histModal')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL: EXPORTAR
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="exportModal" onclick="handleOverlayClick(event,'exportModal')">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-icon" style="background:var(--blue-50)">📤</div>
+      <div><div class="modal-title">Exportar Inventario</div><div class="modal-subtitle">Descarga el inventario en el formato deseado</div></div>
+      <div class="modal-close" onclick="closeModal('exportModal')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="form-group">
+          <label class="form-label">Alcance</label>
+          <select class="form-select">
+            <option>Inventario completo</option>
+            <option>Solo cliente seleccionado</option>
+            <option>Registros filtrados actuales</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Formato</label>
+          <select class="form-select">
+            <option>Excel (.xlsx)</option>
+            <option>CSV (.csv)</option>
+            <option>PDF</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Columnas a incluir</label>
+          <select class="form-select">
+            <option>Todas las columnas</option>
+            <option>Solo campos básicos</option>
+            <option>Personalizar...</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('exportModal')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('exportModal')">⬇ Descargar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CLIENT CONFIG ──
+const clients = {
+  'TechCorp':  { label:'TechCorp S.A.',  color:'#2d6ef5', bg:'rgba(45,110,245,0.1)'  },
+  'ModaPlus':  { label:'ModaPlus',       color:'#8b5cf6', bg:'rgba(139,92,246,0.1)'  },
+  'FreshFood': { label:'FreshFood Co.',  color:'#22c77a', bg:'rgba(34,199,122,0.1)'  },
+  'AutoParts': { label:'AutoParts Mx',   color:'#f59e0b', bg:'rgba(245,158,11,0.1)'  },
+  'HomeDeco':  { label:'HomeDeco',       color:'#ec4899', bg:'rgba(236,72,153,0.1)'  },
+  'MedSupply': { label:'MedSupply',      color:'#ef4444', bg:'rgba(239,68,68,0.1)'   },
+};
+const carriers = { 'DHL':'🟡 DHL','FedEx':'🟣 FedEx','Estafeta':'🔵 Estafeta','Redpack':'🔴 Redpack','UPS':'🟤 UPS','-':'—' };
+
+// ── INVENTORY DATA ──
+const data = [
+  { sku:'SKU-00412', part:'PART-7890-A', desc:'Caja Industrial A4',         client:'TechCorp',  zone:'B', loc:'B-3 · Est.2 · Bin14', qty:248, bultos:31,  carrier:'DHL'      },
+  { sku:'SKU-00891', part:'PART-1122-B', desc:'Pallet Estándar 1200x800',   client:'TechCorp',  zone:'A', loc:'A-1 · Est.1 · Bin02', qty:120, bultos:10,  carrier:'FedEx'    },
+  { sku:'SKU-00210', part:'PART-3344-C', desc:'Film Stretch 500m',          client:'ModaPlus',  zone:'A', loc:'A-2 · Est.3 · Bin07', qty:340, bultos:17,  carrier:'Estafeta' },
+  { sku:'SKU-00334', part:'PART-5566-D', desc:'Cinta Embalaje 48mm',        client:'FreshFood', zone:'D', loc:'D-1 · Est.1 · Bin01', qty:500, bultos:50,  carrier:'DHL'      },
+  { sku:'SKU-01234', part:'PART-9900-F', desc:'Componente R-77',            client:'AutoParts', zone:'C', loc:'C-2 · Est.4 · Bin11', qty:72,  bultos:4,   carrier:'UPS'      },
+  { sku:'SKU-00567', part:'PART-7712-G', desc:'Bandeja Apilable L',         client:'HomeDeco',  zone:'B', loc:'B-1 · Est.2 · Bin09', qty:210, bultos:21,  carrier:'Redpack'  },
+  { sku:'SKU-00781', part:'PART-4401-H', desc:'Guante Quirúrgico Talla M',  client:'MedSupply', zone:'C', loc:'C-3 · Est.1 · Bin03', qty:1200,bultos:24,  carrier:'FedEx'    },
+  { sku:'SKU-00445', part:'PART-2233-I', desc:'Bolsa Kraft 30x40',          client:'ModaPlus',  zone:'A', loc:'A-3 · Est.1 · Bin05', qty:800, bultos:16,  carrier:'DHL'      },
+  { sku:'SKU-00990', part:'PART-6678-J', desc:'Repuesto Motor AX-22',       client:'AutoParts', zone:'D', loc:'D-2 · Est.3 · Bin08', qty:55,  bultos:5,   carrier:'UPS'      },
+  { sku:'SKU-00123', part:'PART-8810-K', desc:'Caja Cartón Doble Pared',    client:'FreshFood', zone:'B', loc:'B-4 · Est.2 · Bin12', qty:430, bultos:43,  carrier:'Estafeta' },
+  { sku:'SKU-00655', part:'PART-1190-L', desc:'Florero Cerámico 25cm',      client:'HomeDeco',  zone:'C', loc:'C-4 · Est.2 · Bin06', qty:88,  bultos:8,   carrier:'Redpack'  },
+  { sku:'SKU-00782', part:'PART-5590-M', desc:'Mascarilla KN95 Caja×50',    client:'MedSupply', zone:'A', loc:'A-4 · Est.3 · Bin10', qty:600, bultos:12,  carrier:'FedEx'    },
+];
+
+let filteredData = [...data];
+let selectedRows = new Set();
+
+// ── RENDER TABLE ──
+function renderTable(rows) {
+  const tbody = document.getElementById('invBody');
+  tbody.innerHTML = rows.map((r, i) => {
+    const cl = clients[r.client] || { label: r.client, color:'#888', bg:'#eee' };
+    const ca = carriers[r.carrier] || r.carrier;
+    const sel = selectedRows.has(i);
+    return `<tr class="${sel?'selected':''}" data-idx="${i}">
+      <td class="td-check"><input type="checkbox" ${sel?'checked':''} onchange="toggleRow(${i},this)"></td>
+      <td><span class="td-sku">${r.sku}</span></td>
+      <td><span class="td-part">${r.part}</span></td>
+      <td><span class="td-desc" title="${r.desc}">${r.desc}</span></td>
+      <td><span class="td-client" style="background:${cl.bg};color:${cl.color};">${cl.label}</span></td>
+      <td>
+        <div class="td-location">
+          <span class="td-location-main">Zona ${r.zone}</span>
+          <span class="td-location-bin">${r.loc}</span>
+        </div>
+      </td>
+      <td><span class="td-qty">${r.qty.toLocaleString()}</span></td>
+      <td><span class="td-bultos">${r.bultos}</span></td>
+      <td><span class="td-carrier">${ca}</span></td>
+      <td>
+        <div class="td-actions">
+          <div class="td-action-btn success" title="Entrada" onclick="openModal('inModal')">📥</div>
+          <div class="td-action-btn"         title="Historial" onclick="openModal('histModal')">📋</div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('resultsCount').innerHTML = `Mostrando <strong>${rows.length}</strong> de 3,842 registros`;
+  document.getElementById('pageFrom').textContent = rows.length ? 1 : 0;
+  document.getElementById('pageTo').textContent   = rows.length;
+  document.getElementById('pageTotal').textContent = '3,842';
+}
+
+// ── FILTER ──
+function filterTable() {
+  const client  = document.getElementById('filterClient').value;
+  const zone    = document.getElementById('filterZone').value;
+  const carrier = document.getElementById('filterCarrier').value;
+  const search  = (document.getElementById('tableSearch').value || document.getElementById('globalSearch').value || '').toLowerCase();
+  filteredData = data.filter(r => {
+    if (client  && r.client  !== client)  return false;
+    if (zone    && r.zone    !== zone)    return false;
+    if (carrier && r.carrier !== carrier) return false;
+    if (search  && !`${r.sku} ${r.desc} ${r.part} ${r.client}`.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  selectedRows.clear();
+  renderTable(filteredData);
+  updateBulkBar();
+  updateTags(client, zone, carrier, search);
+}
+
+function updateTags(client, zone, carrier, search) {
+  const c = document.getElementById('activeTags');
+  let tags = '<span style="font-size:11px;color:var(--text-300);">Filtros activos:</span>';
+  if (client)  tags += `<span class="active-filter-tag">Cliente: ${clients[client]?.label || client} <span class="filter-tag-close" onclick="clearFilter('filterClient')">✕</span></span>`;
+  if (zone)    tags += `<span class="active-filter-tag">Zona: ${zone} <span class="filter-tag-close" onclick="clearFilter('filterZone')">✕</span></span>`;
+  if (carrier) tags += `<span class="active-filter-tag">Carrier: ${carrier} <span class="filter-tag-close" onclick="clearFilter('filterCarrier')">✕</span></span>`;
+  if (search)  tags += `<span class="active-filter-tag">Búsqueda: "${search}" <span class="filter-tag-close" onclick="clearFilter('tableSearch')">✕</span></span>`;
+  if (!client && !zone && !carrier && !search) tags += '<span style="font-size:11px;color:var(--text-300);font-style:italic;">Ninguno</span>';
+  tags += `<span class="filter-results-count" id="resultsCount">Mostrando <strong>${filteredData.length}</strong> de 3,842 registros</span>`;
+  c.innerHTML = tags;
+}
+
+function clearFilter(id) {
+  const el = document.getElementById(id);
+  if (el) el.value = '';
+  filterTable();
+}
+function clearFilters() {
+  ['filterClient','filterZone','filterCarrier','tableSearch','globalSearch'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  filterTable();
+}
+
+// ── SELECTION ──
+function toggleRow(idx, cb) {
+  if (cb.checked) selectedRows.add(idx);
+  else selectedRows.delete(idx);
+  const tr = cb.closest('tr');
+  tr.classList.toggle('selected', cb.checked);
+  updateBulkBar();
+}
+function toggleAll(cb) {
+  filteredData.forEach((_, i) => {
+    if (cb.checked) selectedRows.add(i);
+    else selectedRows.delete(i);
+  });
+  renderTable(filteredData);
+  updateBulkBar();
+}
+function clearSelection() {
+  selectedRows.clear();
+  document.getElementById('checkAll').checked = false;
+  renderTable(filteredData);
+  updateBulkBar();
+}
+function updateBulkBar() {
+  const bar = document.getElementById('bulkBar');
+  const n = selectedRows.size;
+  if (n > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('bulkCount').textContent = n;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+// ── SORT ──
+let sortDir = { qty:-1 };
+function sortTable(col) {
+  sortDir[col] = (sortDir[col] || 1) * -1;
+  filteredData.sort((a,b) => {
+    const va = a[col]; const vb = b[col];
+    if (typeof va === 'number') return (va - vb) * sortDir[col];
+    return va.localeCompare(vb) * sortDir[col];
+  });
+  renderTable(filteredData);
+}
+
+// ── VIEW TOGGLE ──
+function setView(v, btn) {
+  document.querySelectorAll('.table-actions .tbl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── MODAL ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ── QTY BUTTONS ──
+function changeQty(inputId, delta) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  const val = parseInt(inp.value) + delta;
+  if (val >= 1) { inp.value = val; if (inputId === 'outQty') updateOutPreview(); }
+}
+function updateOutPreview() {
+  const qty = parseInt(document.getElementById('outQty')?.value) || 0;
+  const el  = document.getElementById('outResultQty');
+  if (el) el.textContent = `${248 - qty} unidades`;
+}
+
+// ── SIDEBAR ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ── NAV ACTIVE ──
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', e => {
+    const href = item.getAttribute('href');
+    if (!href || href === '#') e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// ── INIT ──
+renderTable(data);
+updateTags('','','','');
+</script>
+</body>
+</html>
