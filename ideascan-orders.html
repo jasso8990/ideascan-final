@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDEA Scan — Órdenes</title>
+<link rel="icon" type="image/png" href="/mnt/user-data/uploads/image__1_.png">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --blue-900:#0a1f5c; --blue-800:#0d2b7a; --blue-700:#1a3fa3;
+  --blue-600:#1a4dbf; --blue-500:#2d6ef5; --blue-400:#5b9bf8;
+  --blue-300:#93c0fb; --blue-200:#c5dcfd; --blue-100:#ddeeff; --blue-50:#f0f6ff;
+  --cyan:#00c2ff; --sidebar-bg:#0a1f5c; --sidebar-w:240px; --topbar-h:60px;
+  --surface:#f4f8ff; --border:#e4eaf8;
+  --text-900:#0a1f5c; --text-600:#3a5aad; --text-400:#6b83c4; --text-300:#a0b3d8;
+  --success:#22c77a; --warning:#f59e0b; --danger:#ef4444; --info:#00c2ff;
+
+  /* order type colors */
+  --sal-color:#ef4444; --sal-bg:rgba(239,68,68,0.07); --sal-border:rgba(239,68,68,0.18);
+  --trf-color:#00c2ff; --trf-bg:rgba(0,194,255,0.07); --trf-border:rgba(0,194,255,0.18);
+  --pkg-color:#8b5cf6; --pkg-bg:rgba(139,92,246,0.08); --pkg-border:rgba(139,92,246,0.2);
+
+  /* status colors */
+  --st-pending-color:#f59e0b;  --st-pending-bg:rgba(245,158,11,0.09);
+  --st-progress-color:#2d6ef5; --st-progress-bg:rgba(45,110,245,0.09);
+  --st-done-color:#22c77a;     --st-done-bg:rgba(34,199,122,0.09);
+
+  --shadow-sm:0 1px 4px rgba(10,31,92,0.06);
+  --shadow-md:0 4px 16px rgba(10,31,92,0.10);
+  --shadow-lg:0 8px 32px rgba(10,31,92,0.14);
+  --radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--text-900);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;}
+.app-shell{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;transition:transform .3s;overflow-y:auto;overflow-x:hidden;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sidebar-logo{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,0.3);}
+.sidebar-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.sidebar-brand{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:900;color:white;letter-spacing:-.3px;line-height:1;}
+.sidebar-brand em{font-style:normal;color:var(--cyan);}
+.sidebar-version{font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+.sidebar-user{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.user-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--blue-600),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);}
+.user-role{font-size:10px;color:rgba(255,255,255,0.35);margin-top:1px;}
+
+
+
+
+
+
+.nav-item.active 
+
+.nav-item.active 
+
+.nav-badge.info{background:var(--blue-500);}
+.nav-item.ai-btn 
+.nav-item.ai-btn 
+.sidebar-footer{margin-top:auto;padding:14px 8px;border-top:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{height:var(--topbar-h);background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;gap:16px;box-shadow:var(--shadow-sm);}
+.topbar-hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:4px;}
+.topbar-hamburger span{width:20px;height:2px;background:var(--blue-700);border-radius:2px;display:block;}
+.topbar-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:800;color:var(--text-900);letter-spacing:-.3px;}
+.topbar-breadcrumb{font-size:13px;color:var(--text-300);}
+.topbar-breadcrumb span{color:var(--blue-500);}
+.topbar-search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;width:220px;transition:border-color .15s,box-shadow .15s;}
+.topbar-search:focus-within{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.1);}
+.topbar-search input{border:none;background:none;outline:none;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;width:100%;}
+.topbar-search input::placeholder{color:var(--text-300);}
+.topbar-actions{display:flex;align-items:center;gap:8px;}
+.topbar-btn{width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background .15s;position:relative;}
+.topbar-btn:hover{background:var(--blue-50);}
+.topbar-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid white;}
+.topbar-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--blue-700),var(--blue-400));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;border:2px solid var(--blue-200);}
+
+/* ── PAGE ── */
+.page-content{padding:24px 28px 48px;flex:1;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap;}
+.page-title{font-family:'Exo 2',sans-serif;font-size:24px;font-weight:900;color:var(--text-900);letter-spacing:-.5px;margin-bottom:4px;}
+.page-subtitle{font-size:13px;color:var(--text-400);}
+.page-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap;}
+.btn-ghost{background:white;color:var(--text-600);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--blue-50);border-color:var(--blue-300);}
+.btn-primary{background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:white;box-shadow:0 4px 14px rgba(45,110,245,0.3);}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(45,110,245,0.4);transform:translateY(-1px);}
+.btn-danger{background:linear-gradient(135deg,#dc2626,var(--danger));color:white;box-shadow:0 4px 14px rgba(239,68,68,0.25);}
+.btn-danger:hover{transform:translateY(-1px);}
+.btn-info{background:linear-gradient(135deg,#0284c7,var(--cyan));color:white;box-shadow:0 4px 14px rgba(0,194,255,0.2);}
+.btn-info:hover{transform:translateY(-1px);}
+.btn-purple{background:linear-gradient(135deg,#6d28d9,#8b5cf6);color:white;box-shadow:0 4px 14px rgba(139,92,246,0.25);}
+.btn-purple:hover{transform:translateY(-1px);}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi-card{background:white;border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default;}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-card.k-total::after{background:linear-gradient(90deg,var(--blue-500),var(--cyan));}
+.kpi-card.k-sal::after{background:linear-gradient(90deg,var(--danger),#f87171);}
+.kpi-card.k-trf::after{background:linear-gradient(90deg,var(--info),#60e0ff);}
+.kpi-card.k-pkg::after{background:linear-gradient(90deg,var(--pkg-color),#a78bfa);}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.kpi-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.kpi-val{font-family:'Exo 2',sans-serif;font-size:30px;font-weight:900;line-height:1;color:var(--text-900);margin-bottom:4px;}
+.kpi-label{font-size:12px;color:var(--text-400);}
+.kpi-sub{font-size:11px;color:var(--text-300);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.kpi-sub strong{color:var(--text-600);}
+.kpi-trend{font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;}
+.kpi-trend.up{background:rgba(34,199,122,0.1);color:var(--success);}
+.kpi-trend.warn{background:rgba(245,158,11,0.1);color:var(--warning);}
+
+/* ── TYPE TABS ── */
+.type-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.type-tab{display:flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-400);transition:all .18s;font-family:'Inter',sans-serif;}
+.type-tab:hover{border-color:var(--blue-300);color:var(--blue-500);}
+.type-tab.t-all{border-color:var(--blue-500);background:var(--blue-500);color:white;}
+.type-tab.t-sal{border-color:var(--sal-color);background:var(--sal-bg);color:var(--sal-color);}
+.type-tab.t-trf{border-color:var(--trf-color);background:var(--trf-bg);color:var(--trf-color);}
+.type-tab.t-pkg{border-color:var(--pkg-color);background:var(--pkg-bg);color:var(--pkg-color);}
+.tab-pill{font-size:10px;font-weight:800;padding:2px 7px;border-radius:100px;background:rgba(0,0,0,0.07);}
+.type-tab.t-all .tab-pill{background:rgba(255,255,255,0.25);}
+
+/* ── STATUS FILTERS ── */
+.status-filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.st-filter{display:flex;align-items:center;gap:5px;padding:6px 13px;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-400);transition:all .15s;font-family:'Inter',sans-serif;}
+.st-filter:hover{border-color:var(--blue-300);}
+.st-filter.sf-all{border-color:var(--blue-400);background:var(--blue-50);color:var(--blue-600);}
+.st-filter.sf-pending{border-color:var(--st-pending-color);background:var(--st-pending-bg);color:var(--st-pending-color);}
+.st-filter.sf-progress{border-color:var(--st-progress-color);background:var(--st-progress-bg);color:var(--st-progress-color);}
+.st-filter.sf-done{border-color:var(--st-done-color);background:var(--st-done-bg);color:var(--st-done-color);}
+.st-dot{width:7px;height:7px;border-radius:50%;}
+
+/* ── SEARCH BAR ── */
+.search-bar{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sb-search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1;min-width:180px;}
+.sb-search:focus-within{border-color:var(--blue-400);}
+.sb-search input{border:none;background:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;width:100%;color:var(--text-900);}
+.sb-search input::placeholder{color:var(--text-300);}
+.sb-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 28px 8px 12px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b83c4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color .15s;}
+.sb-select:focus{border-color:var(--blue-400);}
+.sb-info{font-size:12px;color:var(--text-300);margin-left:auto;}
+.sb-info strong{color:var(--text-600);}
+
+/* ── CARDS GRID ── */
+.orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;}
+
+/* ── ORDER CARD ── */
+.order-card{background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;cursor:pointer;animation:cardIn .3s ease both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.order-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--blue-300);}
+.order-card.pkg-card{border-left:4px solid var(--pkg-color);}
+.order-card.sal-card{border-left:4px solid var(--sal-color);}
+.order-card.trf-card{border-left:4px solid var(--trf-color);}
+
+/* Card header */
+.oc-header{padding:14px 16px 10px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--border);}
+.oc-type-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.oc-id{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:900;color:var(--text-900);letter-spacing:-.2px;}
+.oc-date{font-size:10px;color:var(--text-300);margin-top:2px;}
+.oc-status{margin-left:auto;flex-shrink:0;}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;}
+.status-badge.pending{background:var(--st-pending-bg);color:var(--st-pending-color);border:1px solid rgba(245,158,11,0.2);}
+.status-badge.progress{background:var(--st-progress-bg);color:var(--st-progress-color);border:1px solid rgba(45,110,245,0.2);}
+.status-badge.done{background:var(--st-done-bg);color:var(--st-done-color);border:1px solid rgba(34,199,122,0.2);}
+.st-blink{width:6px;height:6px;border-radius:50%;}
+.status-badge.pending .st-blink{background:var(--st-pending-color);animation:blink 1.5s infinite;}
+.status-badge.progress .st-blink{background:var(--st-progress-color);animation:blink 1s infinite;}
+.status-badge.done    .st-blink{background:var(--st-done-color);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.type-label{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:4px;}
+.type-label.sal{background:var(--sal-bg);color:var(--sal-color);border:1px solid var(--sal-border);}
+.type-label.trf{background:var(--trf-bg);color:var(--trf-color);border:1px solid var(--trf-border);}
+.type-label.pkg{background:var(--pkg-bg);color:var(--pkg-color);border:1px solid var(--pkg-border);}
+
+/* Card body */
+.oc-body{padding:12px 16px;}
+
+/* PKG card — simple confirmation */
+.pkg-confirm-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--pkg-bg);border:1px solid var(--pkg-border);border-radius:9px;margin-bottom:8px;}
+.pkg-num-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--pkg-color);opacity:.7;}
+.pkg-num-val{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:900;color:var(--pkg-color);}
+.pkg-confirm-check{margin-left:auto;width:30px;height:30px;border-radius:50%;border:2px solid var(--pkg-color);display:flex;align-items:center;justify-content:center;font-size:14px;background:white;transition:all .2s;flex-shrink:0;}
+.pkg-confirm-check.confirmed{background:var(--pkg-color);color:white;border-color:var(--pkg-color);}
+.pkg-note{font-size:11px;color:var(--text-400);margin-top:6px;}
+
+/* Products list (sal / trf) */
+.oc-products{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.oc-prod-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border-radius:8px;border:1px solid var(--border);}
+.opr-sku{font-family:monospace;font-size:11px;font-weight:700;color:var(--blue-600);background:var(--blue-50);padding:2px 7px;border-radius:4px;border:1px solid var(--blue-100);white-space:nowrap;flex-shrink:0;}
+.opr-part{font-size:10px;color:var(--text-300);font-family:monospace;flex-shrink:0;}
+.opr-desc{font-size:11px;font-weight:600;color:var(--text-900);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.opr-qty{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:900;color:var(--text-600);flex-shrink:0;}
+.opr-bultos{font-size:10px;color:var(--text-300);flex-shrink:0;}
+.oc-more{font-size:11px;color:var(--text-300);text-align:center;padding:4px;}
+
+/* Card footer */
+.oc-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--surface);}
+.oc-meta{font-size:11px;color:var(--text-300);}
+.oc-meta strong{color:var(--text-600);}
+.oc-footer-actions{margin-left:auto;display:flex;gap:6px;}
+.oc-btn{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:white;color:var(--text-600);font-family:'Inter',sans-serif;transition:all .15s;}
+.oc-btn:hover{background:var(--blue-50);border-color:var(--blue-300);color:var(--blue-600);}
+.oc-btn.primary{background:var(--blue-500);border-color:var(--blue-500);color:white;}
+.oc-btn.primary:hover{background:var(--blue-600);}
+.oc-btn.success{background:var(--success);border-color:var(--success);color:white;}
+.oc-btn.danger{background:var(--danger);border-color:var(--danger);color:white;}
+.oc-btn.purple{background:var(--pkg-color);border-color:var(--pkg-color);color:white;}
+
+/* Progress bar inside card */
+.oc-progress{margin:0 16px 12px;}
+.oc-progress-top{display:flex;justify-content:space-between;margin-bottom:4px;}
+.oc-progress-label{font-size:10px;color:var(--text-300);}
+.oc-progress-pct{font-size:10px;font-weight:700;color:var(--text-600);}
+.oc-progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.oc-progress-fill{height:100%;border-radius:2px;transition:width .4s ease;}
+
+/* ── DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(10,31,92,0.4);z-index:400;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:480px;max-width:96vw;background:white;box-shadow:var(--shadow-lg);z-index:401;transform:translateX(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.drawer-type-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.drawer-title{font-family:'Exo 2',sans-serif;font-size:18px;font-weight:800;color:var(--text-900);letter-spacing:-.2px;}
+.drawer-sub{font-size:11px;color:var(--text-400);margin-top:2px;}
+.drawer-close{margin-left:auto;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-400);transition:all .15s;flex-shrink:0;}
+.drawer-close:hover{background:rgba(239,68,68,0.07);color:var(--danger);}
+.drawer-body{flex:1;overflow-y:auto;padding:20px 22px;}
+.drawer-section{margin-bottom:22px;}
+.ds-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-300);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ds-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.ds-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ds-field{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
+.ds-field.full{grid-column:1/-1;}
+.dsf-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);margin-bottom:3px;}
+.dsf-val{font-size:13px;font-weight:600;color:var(--text-900);}
+.dsf-val.mono{font-family:monospace;color:var(--blue-700);}
+.prod-table{width:100%;border-collapse:collapse;font-size:12px;}
+.prod-table th{text-align:left;padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);background:var(--surface);border-bottom:1px solid var(--border);}
+.prod-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text-600);vertical-align:middle;}
+.prod-table tr:last-child td{border-bottom:none;}
+.prod-table tr:hover td{background:var(--blue-50);}
+.drawer-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+
+/* ── MODAL NEW ORDER ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,31,92,0.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:20px;box-shadow:0 24px 80px rgba(10,31,92,0.25);width:100%;max-width:580px;max-height:92vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s;display:flex;flex-direction:column;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:20px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;background:white;z-index:1;border-radius:20px 20px 0 0;}
+.modal-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.modal-title{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:800;color:var(--text-900);}
+.modal-sub{font-size:11px;color:var(--text-400);margin-top:2px;}
+.modal-close{margin-left:auto;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-400);transition:all .15s;}
+.modal-close:hover{background:rgba(239,68,68,0.07);color:var(--danger);}
+.modal-body{padding:18px 22px;}
+.modal-footer{padding:14px 22px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:white;border-radius:0 0 20px 20px;}
+
+/* type selector */
+.type-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
+.type-opt{padding:14px 8px;border-radius:10px;border:2px solid var(--border);text-align:center;cursor:pointer;transition:all .18s;}
+.type-opt:hover{border-color:var(--blue-300);}
+.type-opt.sel-sal{border-color:var(--sal-color);background:var(--sal-bg);}
+.type-opt.sel-trf{border-color:var(--trf-color);background:var(--trf-bg);}
+.type-opt.sel-pkg{border-color:var(--pkg-color);background:var(--pkg-bg);}
+.type-opt-icon{font-size:24px;margin-bottom:5px;}
+.type-opt-label{font-size:11px;font-weight:700;color:var(--text-600);}
+.type-opt.sel-sal .type-opt-label{color:var(--sal-color);}
+.type-opt.sel-trf .type-opt-label{color:var(--trf-color);}
+.type-opt.sel-pkg .type-opt-label{color:var(--pkg-color);}
+
+/* PKG simple form */
+.pkg-simple{background:var(--pkg-bg);border:1.5px solid var(--pkg-border);border-radius:12px;padding:18px;text-align:center;}
+.pkg-simple-title{font-family:'Exo 2',sans-serif;font-size:15px;font-weight:800;color:var(--pkg-color);margin-bottom:4px;}
+.pkg-simple-sub{font-size:12px;color:var(--text-400);margin-bottom:14px;}
+
+/* form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-400);}
+.form-label .req{color:var(--danger);}
+.form-input{background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;transition:all .2s;width:100%;}
+.form-input:focus{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(45,110,245,0.08);}
+.form-select{background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 32px 10px 13px;font-size:13px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b83c4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:border-color .15s;width:100%;}
+.form-select:focus{border-color:var(--blue-400);}
+.form-divider{grid-column:1/-1;height:1px;background:var(--border);}
+.form-section-title{grid-column:1/-1;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:800;color:var(--text-400);letter-spacing:.3px;}
+.form-hint{font-size:10px;color:var(--text-300);}
+
+/* products editor */
+.products-editor{grid-column:1/-1;}
+.pe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.pe-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-400);}
+.pe-add{font-size:11px;font-weight:700;color:var(--blue-500);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;}
+.pe-add:hover{color:var(--blue-700);}
+.pe-row{display:grid;grid-template-columns:1fr 1fr 2fr 60px 50px 28px;gap:6px;align-items:center;margin-bottom:6px;}
+.pe-input{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;color:var(--text-900);font-family:'Inter',sans-serif;outline:none;width:100%;}
+.pe-input:focus{border-color:var(--blue-400);}
+.pe-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-300);text-align:center;}
+.pe-del{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-300);transition:all .15s;}
+.pe-del:hover{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.05);color:var(--danger);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--blue-900);color:white;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(10,31,92,0.3);z-index:1000;transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.toast-title{font-size:13px;font-weight:700;}
+.toast-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px;}
+
+/* SIDEBAR OVERLAY */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.orders-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main{margin-left:0;}
+  .topbar-hamburger{display:flex;}
+  .topbar-search{width:160px;}
+  .kpi-strip{grid-template-columns:1fr 1fr;}
+  .drawer{width:100vw;}
+}
+@media(max-width:700px){.orders-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){
+  .page-content{padding:16px 16px 40px;}
+  .topbar{padding:0 16px;}
+  .topbar-search{display:none;}
+  .form-grid{grid-template-columns:1fr;}
+  .type-selector{grid-template-columns:1fr;}
+  .pe-row{grid-template-columns:1fr 1fr 60px 28px;}
+}
+.nav-label{padding:18px 18px 8px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 18px;margin:1px 8px;border-radius:10px;cursor:pointer;transition:background .15s;position:relative;text-decoration:none;}
+.nav-item:hover{background:rgba(255,255,255,.06);}
+.nav-item.active{background:linear-gradient(90deg,rgba(45,110,245,.35),rgba(45,110,245,.15));}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--cyan);border-radius:0 2px 2px 0;}
+.nav-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(255,255,255,.05);transition:background .15s;}
+.nav-item.active .nav-icon{background:rgba(45,110,245,.4);}
+.nav-item:hover .nav-icon{background:rgba(255,255,255,.1);}
+.nav-text{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);}
+.nav-item.active .nav-text{color:#fff;font-weight:600;}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;background:#ef4444;color:#fff;}
+.nav-item.ai-btn{background:linear-gradient(90deg,rgba(124,58,237,.25),rgba(124,58,237,.1));border:1px solid rgba(124,58,237,.2);}
+.nav-item.ai-btn .nav-icon{background:rgba(124,58,237,.3);}
+.nav-item.ai-btn .nav-text{color:rgba(220,200,255,.9);font-weight:600;}
+
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text-900,#0a1f5c);border-radius:2px;}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://usqugtxeynkozlobeojt.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcXVndHhleW5rb3psb2Jlb2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwOTYxMzAsImV4cCI6MjA4NjY3MjEzMH0.zs4XiF8AgcE-l3ebtaxvoN7V9rf-6MHWNxMThiQUXKE';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ── Cargar datos reales ──
+async function loadOrdersFromDB() {
+  const [{ data: ords }, { data: cls }] = await Promise.all([
+    db.from('ideascan.ordenes')
+      .select('*, clientes(nombre,color), almacenes_origen:almacen_origen(nombre)')
+      .order('created_at', { ascending: false }),
+    db.from('ideascan.clientes').select('id,nombre,color').eq('activo',true),
+  ]);
+  if (!ords) return;
+  // Map DB rows to orders array format
+  const dbOrders = ords.map(o => ({
+    id: o.folio,
+    type: { salida:'sal', traslado:'trf', paqueteria:'pkg' }[o.tipo] || o.tipo,
+    status: { pendiente:'pending', proceso:'progress', completada:'done', cancelada:'cancelled' }[o.estado] || o.estado,
+    date: new Date(o.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short'}),
+    ref: o.clientes?.nombre || '—',
+    area: o.almacenes_origen?.nombre || '—',
+    notes: o.notas || '',
+    progress: o.estado==='completada' ? 100 : o.estado==='proceso' ? 50 : 0,
+    priority: o.prioridad || 'normal',
+    _id: o.id,
+  }));
+  // Merge with existing orders array (DB takes precedence)
+  const existingFolios = new Set(dbOrders.map(o=>o.id));
+  const remaining = orders.filter(o=>!existingFolios.has(o.id));
+  orders.splice(0, orders.length, ...dbOrders, ...remaining);
+  applyFilters();
+  populateClientFilter(cls||[]);
+}
+function populateClientFilter(cls) {
+  const sel = document.getElementById('filterCliente');
+  if (!sel) return;
+  const extra = cls.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+  if (!sel.innerHTML.includes(cls[0]?.nombre||'x')) sel.innerHTML += extra;
+}
+document.addEventListener('DOMContentLoaded', () => { loadOrdersFromDB(); setTimeout(loadOrdersFromDB, 1000); });
+</script>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <img src="/mnt/user-data/uploads/image__1_.png" alt="IDEA Scan" onerror="this.parentNode.style.background='#1a4dbf';this.style.display='none'">
+    </div>
+    <div>
+      <div class="sidebar-brand">IDEA <em>Scan</em></div>
+      <div class="sidebar-version">v2.0 · WMS</div>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar">JR</div>
+    <div>
+      <div class="user-name">Juan Rodríguez</div>
+      <div class="user-role">Administrador</div>
+    </div>
+    <div class="user-chevron">▾</div>
+  </div>
+  <div class="nav-label">Principal</div>
+  <a class="nav-item" href="ideascan-dashboard.html">
+    <div class="nav-icon">📊</div>
+    <span class="nav-text">Dashboard</span>
+  </a>
+  <a class="nav-item" href="ideascan-movements.html">
+    <div class="nav-icon">🔄</div>
+    <span class="nav-text">Movimientos</span>
+  </a>
+  <a class="nav-item active" href="ideascan-orders.html">
+    <div class="nav-icon">📋</div>
+    <span class="nav-text">Órdenes</span>
+    <span class="nav-badge">12</span>
+  </a>
+  <a class="nav-item" href="ideascan-map.html">
+    <div class="nav-icon">🗺️</div>
+    <span class="nav-text">Mapa Almacén</span>
+  </a>
+  <div class="nav-label">IA</div>
+  <a class="nav-item ai-btn" href="ideascan-ai-entry.html">
+    <div class="nav-icon">🤖</div>
+    <span class="nav-text">Entrada con IA</span>
+  </a>
+  <div class="nav-label">Reportes</div>
+  <a class="nav-item" href="ideascan-reports.html">
+    <div class="nav-icon">📑</div>
+    <span class="nav-text">Reportes</span>
+  </a>
+  <div class="nav-label">Sistema</div>
+  <a class="nav-item" href="ideascan-config.html">
+    <div class="nav-icon">⚙️</div>
+    <span class="nav-text">Configuración</span>
+  </a>
+  <div class="sb-foot">
+    <a class="nav-item" href="#">
+      <div class="nav-icon">🚪</div>
+      <span class="nav-text">Cerrar sesión</span>
+    </a>
+  </div>
+</aside>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <button class="topbar-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+      <div>
+        <div class="topbar-title">Órdenes</div>
+        <div class="topbar-breadcrumb">IDEA Scan · <span>Órdenes</span></div>
+      </div>
+      <div class="topbar-search">
+        <span style="font-size:13px;color:var(--text-300)">🔍</span>
+        <input type="text" placeholder="N° orden, SKU, cliente..." id="globalSearch" oninput="applyFilters()">
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-btn">📷</div>
+        <div class="topbar-btn">🔔<div class="topbar-notif-dot"></div></div>
+        <div class="topbar-avatar">JR</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- HEADER -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">📋 Órdenes</div>
+          <div class="page-subtitle">Recibidas de clientes externos · Salidas, Traslados y Paquetería</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-info    btn-sm" onclick="openNewOrder('trf')">🔄 Nuevo Traslado</button>
+          <button class="btn btn-danger  btn-sm" onclick="openNewOrder('sal')">📤 Nueva Salida</button>
+          <button class="btn btn-purple  btn-sm" onclick="openNewOrder('pkg')">📦 Confirmar Paquetería</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-strip">
+        <div class="kpi-card k-total">
+          <div class="kpi-top"><div class="kpi-icon" style="background:rgba(45,110,245,0.1)">📋</div><span class="kpi-trend warn">● 12 activas</span></div>
+          <div class="kpi-val">38</div>
+          <div class="kpi-label">Órdenes este mes</div>
+          <div class="kpi-sub"><strong>4</strong> urgentes · vencen hoy</div>
+        </div>
+        <div class="kpi-card k-sal">
+          <div class="kpi-top"><div class="kpi-icon" style="background:rgba(239,68,68,0.08)">📤</div><span class="kpi-trend up">▲ 14%</span></div>
+          <div class="kpi-val">21</div>
+          <div class="kpi-label">Órdenes de salida</div>
+          <div class="kpi-sub"><strong>7</strong> pendientes de despacho</div>
+        </div>
+        <div class="kpi-card k-trf">
+          <div class="kpi-top"><div class="kpi-icon" style="background:rgba(0,194,255,0.08)">🔄</div><span class="kpi-trend up">▲ 5%</span></div>
+          <div class="kpi-val">9</div>
+          <div class="kpi-label">Traslados internos</div>
+          <div class="kpi-sub"><strong>3</strong> en proceso ahora</div>
+        </div>
+        <div class="kpi-card k-pkg">
+          <div class="kpi-top"><div class="kpi-icon" style="background:rgba(139,92,246,0.08)">📦</div><span class="kpi-trend up">▲ 9%</span></div>
+          <div class="kpi-val">8</div>
+          <div class="kpi-label">Paquetería confirmada</div>
+          <div class="kpi-sub"><strong>2</strong> pendientes de confirmar</div>
+        </div>
+      </div>
+
+      <!-- TYPE TABS -->
+      <div class="type-tabs">
+        <button class="type-tab t-all" id="ttab-all" onclick="setTypeTab('all',this)">Todas <span class="tab-pill" id="tc-all">0</span></button>
+        <button class="type-tab"       id="ttab-sal" onclick="setTypeTab('sal',this)">📤 Salida <span class="tab-pill" id="tc-sal">0</span></button>
+        <button class="type-tab"       id="ttab-trf" onclick="setTypeTab('trf',this)">🔄 Traslado <span class="tab-pill" id="tc-trf">0</span></button>
+        <button class="type-tab"       id="ttab-pkg" onclick="setTypeTab('pkg',this)">📦 Paquetería <span class="tab-pill" id="tc-pkg">0</span></button>
+      </div>
+
+      <!-- STATUS FILTERS -->
+      <div class="status-filters">
+        <button class="st-filter sf-all"      id="sf-all"      onclick="setStatusFilter('all',this)">Todos los estados</button>
+        <button class="st-filter"             id="sf-pending"  onclick="setStatusFilter('pending',this)"><div class="st-dot" style="background:var(--st-pending-color)"></div>Pendiente</button>
+        <button class="st-filter"             id="sf-progress" onclick="setStatusFilter('progress',this)"><div class="st-dot" style="background:var(--st-progress-color)"></div>En proceso</button>
+        <button class="st-filter"             id="sf-done"     onclick="setStatusFilter('done',this)"><div class="st-dot" style="background:var(--st-done-color)"></div>Completada</button>
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="search-bar">
+        <div class="sb-search">
+          <span style="font-size:13px;color:var(--text-300)">🔍</span>
+          <input type="text" placeholder="N° orden, SKU, N° parte, descripción..." id="tableSearch" oninput="applyFilters()">
+        </div>
+        <select class="sb-select" id="sortBy" onchange="applyFilters()" style="min-width:150px;">
+          <option value="date_desc">Más recientes primero</option>
+          <option value="date_asc">Más antiguas primero</option>
+          <option value="status">Por estado</option>
+          <option value="type">Por tipo</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearAll()">✕ Limpiar</button>
+        <div class="sb-info" id="sbInfo">Mostrando <strong>0</strong> órdenes</div>
+      </div>
+
+      <!-- ORDERS GRID -->
+      <div class="orders-grid" id="ordersGrid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DETAIL DRAWER ═══ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-type-icon" id="dIcon"></div>
+    <div><div class="drawer-title" id="dTitle"></div><div class="drawer-sub" id="dSub"></div></div>
+    <div class="drawer-close" onclick="closeDrawer()">✕</div>
+  </div>
+  <div class="drawer-body" id="dBody"></div>
+  <div class="drawer-footer" id="dFooter"></div>
+</div>
+
+<!-- ═══ NEW ORDER MODAL ═══ -->
+<div class="modal-overlay" id="newOrderModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" id="mIcon">📤</div>
+      <div><div class="modal-title" id="mTitle">Nueva Orden</div><div class="modal-sub" id="mSub"></div></div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-footer" id="mFooter"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✓</div>
+  <div><div class="toast-title" id="toastTitle"></div><div class="toast-sub" id="toastSub"></div></div>
+</div>
+
+<script>
+// ── DATA ──
+const orders = [];
+
+let currentType   = 'all';
+let currentStatus = 'all';
+let filtered = [];
+
+const typeIcons  = { sal:'📤', trf:'🔄', pkg:'📦' };
+const typeLabels = { sal:'Salida', trf:'Traslado', pkg:'Paquetería' };
+const typeClass  = { sal:'sal', trf:'trf', pkg:'pkg' };
+const stLabels   = { pending:'Pendiente', progress:'En proceso', done:'Completada' };
+const stIcons    = { pending:'⏳', progress:'⚙️', done:'✅' };
+const progressColors = { sal:'var(--sal-color)', trf:'var(--trf-color)', pkg:'var(--pkg-color)' };
+
+// ── RENDER CARDS ──
+function renderCards(rows) {
+  const grid = document.getElementById('ordersGrid');
+  if (!rows.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-300);">
+      <div style="font-size:40px;margin-bottom:12px;">📭</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-400);">Sin órdenes</div>
+      <div style="font-size:13px;margin-top:4px;">Ajusta los filtros para ver resultados</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = rows.map((o, i) => {
+    const tc = typeClass[o.type];
+    const statusBadge = `<span class="status-badge ${o.status}"><div class="st-blink"></div>${stLabels[o.status]}</span>`;
+    const typeLabelHtml = `<span class="type-label ${tc}">${typeIcons[o.type]} ${typeLabels[o.type]}</span>`;
+
+    // PKG card
+    if (o.type === 'pkg') {
+      const confirmed = o.status === 'done';
+      return `<div class="order-card pkg-card" style="animation-delay:${i*0.04}s" onclick="openDrawer(${orders.indexOf(o)})">
+        <div class="oc-header">
+          <div class="oc-type-icon" style="background:var(--pkg-bg)">${typeIcons[o.type]}</div>
+          <div><div class="oc-id">${o.id}</div><div class="oc-date">${o.date} · ${o.ref}</div>${typeLabelHtml}</div>
+          <div class="oc-status">${statusBadge}</div>
+        </div>
+        <div class="oc-body">
+          <div class="pkg-confirm-row">
+            <div>
+              <div class="pkg-num-label">${o.xlRows ? 'Registros importados' : 'N° Interno'}</div>
+              <div class="pkg-num-val">${o.xlRows ? o.xlRows.length + ' registros' : o.internalNum}</div>
+            </div>
+            <div class="pkg-confirm-check ${confirmed?'confirmed':''}" onclick="event.stopPropagation();togglePkgConfirm(${orders.indexOf(o)},this)">
+              ${confirmed ? '✓' : ''}
+            </div>
+          </div>
+          <div class="pkg-note">${o.notes}</div>
+        </div>
+        <div class="oc-footer">
+          <div class="oc-meta">${o.date}</div>
+          <div class="oc-footer-actions">
+            <button class="oc-btn" onclick="event.stopPropagation();openDrawer(${orders.indexOf(o)})">Ver detalle</button>
+            ${!confirmed ? `<button class="oc-btn purple" onclick="event.stopPropagation();confirmPkg(${orders.indexOf(o)})">✓ Confirmar</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    // SAL / TRF cards
+    const prodHtml = o.products.slice(0,2).map(p =>
+      `<div class="oc-prod-row">
+        <span class="opr-sku">${p.sku}</span>
+        <span class="opr-part">${p.part}</span>
+        <span class="opr-desc">${p.desc}</span>
+        <span class="opr-qty">${p.qty}</span>
+        <span class="opr-bultos">${p.bultos} bto</span>
+      </div>`
+    ).join('');
+    const more = o.products.length > 2 ? `<div class="oc-more">+${o.products.length-2} producto${o.products.length-2>1?'s':''} más</div>` : '';
+
+    const progressHtml = (o.status === 'progress') ? `
+      <div class="oc-progress">
+        <div class="oc-progress-top">
+          <span class="oc-progress-label">Progreso</span>
+          <span class="oc-progress-pct">${o.progress}%</span>
+        </div>
+        <div class="oc-progress-bar"><div class="oc-progress-fill" style="width:${o.progress}%;background:${progressColors[o.type]}"></div></div>
+      </div>` : '';
+
+    const actionBtn = o.status === 'pending'
+      ? `<button class="oc-btn primary" onclick="event.stopPropagation();processOrder(${orders.indexOf(o)})">▶ Iniciar</button>`
+      : o.status === 'progress'
+      ? `<button class="oc-btn success" onclick="event.stopPropagation();completeOrder(${orders.indexOf(o)})">✓ Completar</button>`
+      : '';
+
+    return `<div class="order-card ${tc}-card" style="animation-delay:${i*0.04}s" onclick="openDrawer(${orders.indexOf(o)})">
+      <div class="oc-header">
+        <div class="oc-type-icon" style="background:var(--${tc}-bg)">${typeIcons[o.type]}</div>
+        <div><div class="oc-id">${o.id}</div><div class="oc-date">${o.date} · ${o.ref}</div>${typeLabelHtml}</div>
+        <div class="oc-status">${statusBadge}</div>
+      </div>
+      <div class="oc-body">
+        <div class="oc-products">${prodHtml}</div>
+        ${more}
+      </div>
+      ${o.packaging && o.packaging.length ? `<div style="padding:0 16px 10px;display:flex;gap:6px;flex-wrap:wrap;">
+        ${o.packaging.map(p=>`<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.18);color:var(--sal-color);">${p.qty}× ${p.type}</span>`).join('')}
+      </div>` : ''}
+      ${progressHtml}
+      <div class="oc-footer">
+        <div class="oc-meta">Área: <strong>${o.area}</strong> · <strong>${o.products.length}</strong> SKU${o.products.length>1?'s':''}</div>
+        <div class="oc-footer-actions">
+          <button class="oc-btn" onclick="event.stopPropagation();openDrawer(${orders.indexOf(o)})">Ver detalle</button>
+          ${actionBtn}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Update counts
+  const all = rows.length;
+  const sal = rows.filter(r=>r.type==='sal').length;
+  const trf = rows.filter(r=>r.type==='trf').length;
+  const pkg = rows.filter(r=>r.type==='pkg').length;
+  document.getElementById('tc-all').textContent = all;
+  document.getElementById('tc-sal').textContent = sal;
+  document.getElementById('tc-trf').textContent = trf;
+  document.getElementById('tc-pkg').textContent = pkg;
+  document.getElementById('sbInfo').innerHTML = `Mostrando <strong>${all}</strong> órdenes`;
+}
+
+// ── FILTERS ──
+function applyFilters() {
+  const search = (document.getElementById('tableSearch').value || document.getElementById('globalSearch').value || '').toLowerCase();
+  const sort   = document.getElementById('sortBy').value;
+
+  filtered = orders.filter(o => {
+    if (currentType   !== 'all' && o.type   !== currentType)   return false;
+    if (currentStatus !== 'all' && o.status !== currentStatus) return false;
+    if (search) {
+      const prods = (o.products||[]).map(p=>`${p.sku} ${p.part} ${p.desc}`).join(' ');
+      if (!`${o.id} ${o.ref} ${o.internalNum||''} ${prods}`.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  const statusOrder = { pending:0, progress:1, done:2 };
+  const typeOrder   = { sal:0, trf:1, pkg:2 };
+  if (sort === 'status')    filtered.sort((a,b) => statusOrder[a.status]-statusOrder[b.status]);
+  else if (sort === 'type') filtered.sort((a,b) => typeOrder[a.type]-typeOrder[b.type]);
+
+  renderCards(filtered);
+}
+
+function setTypeTab(type, btn) {
+  currentType = type;
+  const classes = { all:'t-all', sal:'t-sal', trf:'t-trf', pkg:'t-pkg' };
+  ['all','sal','trf','pkg'].forEach(t => {
+    document.getElementById('ttab-'+t).className = 'type-tab' + (t===type ? ' '+classes[t] : '');
+  });
+  applyFilters();
+}
+
+function setStatusFilter(status, btn) {
+  currentStatus = status;
+  ['all','pending','progress','done'].forEach(s => {
+    const el = document.getElementById('sf-'+s);
+    el.className = 'st-filter' + (s===status ? ` sf-${s}` : '');
+  });
+  applyFilters();
+}
+
+function clearAll() {
+  currentType = 'all'; currentStatus = 'all';
+  document.getElementById('tableSearch').value = '';
+  document.getElementById('globalSearch').value = '';
+  document.getElementById('sortBy').value = 'date_desc';
+  ['all','sal','trf','pkg'].forEach(t => {
+    const classes = { all:'t-all' };
+    document.getElementById('ttab-'+t).className = 'type-tab' + (t==='all'?' t-all':'');
+  });
+  ['all','pending','progress','done'].forEach(s => {
+    document.getElementById('sf-'+s).className = 'st-filter' + (s==='all'?' sf-all':'');
+  });
+  applyFilters();
+}
+
+// ── ORDER ACTIONS ──
+function processOrder(idx) {
+  orders[idx].status   = 'progress';
+  orders[idx].progress = 20;
+  applyFilters();
+  showToast('⚙️', `${orders[idx].id} — En proceso`, 'info');
+}
+function completeOrder(idx) {
+  orders[idx].status   = 'done';
+  orders[idx].progress = 100;
+  applyFilters();
+  showToast('✓', `${orders[idx].id} — Completada`, 'success');
+}
+function confirmPkg(idx) {
+  orders[idx].status = 'done';
+  applyFilters();
+  showToast('✓', `${orders[idx].id} — Paquetería confirmada`, 'success');
+}
+function togglePkgConfirm(idx, el) {
+  if (orders[idx].status !== 'done') confirmPkg(idx);
+}
+
+// ── DRAWER ──
+function openDrawer(idx) {
+  const o = orders[idx];
+  const tc = typeClass[o.type];
+  const bgMap = { sal:'var(--sal-bg)', trf:'var(--trf-bg)', pkg:'var(--pkg-bg)' };
+
+  document.getElementById('dIcon').style.background = bgMap[o.type];
+  document.getElementById('dIcon').textContent = typeIcons[o.type];
+  document.getElementById('dIcon').style.fontSize = '22px';
+  document.getElementById('dTitle').textContent = o.id;
+  document.getElementById('dSub').textContent   = `${typeLabels[o.type]} · ${o.date} · ${stLabels[o.status]}`;
+
+  let body = `
+    <div class="drawer-section">
+      <div class="ds-title">Información General</div>
+      <div class="ds-grid">
+        <div class="ds-field"><div class="dsf-label">N° de Orden</div><div class="dsf-val mono">${o.id}</div></div>
+        <div class="ds-field"><div class="dsf-label">Referencia Cliente</div><div class="dsf-val mono">${o.ref}</div></div>
+        <div class="ds-field"><div class="dsf-label">Tipo</div><div class="dsf-val">${typeIcons[o.type]} ${typeLabels[o.type]}</div></div>
+        <div class="ds-field"><div class="dsf-label">Estado</div><div class="dsf-val">${stIcons[o.status]} ${stLabels[o.status]}</div></div>
+        <div class="ds-field"><div class="dsf-label">Fecha</div><div class="dsf-val">${o.date}</div></div>
+        ${o.area ? `<div class="ds-field"><div class="dsf-label">Área / Zona</div><div class="dsf-val">${o.area}</div></div>` : ''}
+        ${o.internalNum ? `<div class="ds-field full"><div class="dsf-label">N° Interno</div><div class="dsf-val mono" style="font-size:18px;font-family:'Exo 2',sans-serif;font-weight:900;color:var(--pkg-color)">${o.internalNum}</div></div>` : ''}
+      </div>
+    </div>`;
+
+  if (o.products && o.products.length) {
+    body += `<div class="drawer-section">
+      <div class="ds-title">Productos (${o.products.length} SKU${o.products.length>1?'s':''})</div>
+      <table class="prod-table">
+        <thead><tr><th>SKU</th><th>N° Parte</th><th>Descripción</th><th>Cant.</th><th>Bultos</th></tr></thead>
+        <tbody>${o.products.map(p=>`<tr>
+          <td><span class="opr-sku">${p.sku}</span></td>
+          <td style="font-family:monospace;font-size:11px;color:var(--text-400)">${p.part}</td>
+          <td style="font-weight:600;color:var(--text-900)">${p.desc}</td>
+          <td style="font-family:'Exo 2',sans-serif;font-weight:800;font-size:15px">${p.qty}</td>
+          <td style="color:var(--text-400)">${p.bultos}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+
+  if (o.progress > 0 && o.progress < 100) {
+    body += `<div class="drawer-section">
+      <div class="ds-title">Progreso</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:14px 16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:12px;font-weight:600;color:var(--text-600)">Avance de la orden</span>
+          <span style="font-family:'Exo 2',sans-serif;font-size:18px;font-weight:900;color:${progressColors[o.type]}">${o.progress}%</span>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${o.progress}%;background:${progressColors[o.type]};border-radius:4px;transition:width .4s"></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Packaging (sal)
+  if (o.packaging && o.packaging.length) {
+    body += `<div class="drawer-section">
+      <div class="ds-title">Empaque de salida</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${o.packaging.map(p=>`
+          <div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.18);border-radius:10px;padding:10px 16px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(239,68,68,0.6);margin-bottom:4px;">${p.type}</div>
+            <div style="font-family:'Exo 2',sans-serif;font-size:22px;font-weight:900;color:var(--sal-color);">${p.qty}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Excel rows (pkg)
+  if (o.xlRows && o.xlRows.length) {
+    body += `<div class="drawer-section">
+      <div class="ds-title">Registros importados (${o.xlRows.length})</div>
+      <table class="prod-table">
+        <thead><tr><th>N° Interno</th><th>Tracking</th><th>Bultos</th></tr></thead>
+        <tbody>${o.xlRows.map(r=>`<tr>
+          <td style="font-family:monospace;font-weight:700;color:var(--pkg-color);">${r.internal}</td>
+          <td style="font-family:monospace;font-size:11px;color:var(--text-400);">${r.tracking||'—'}</td>
+          <td style="font-family:'Exo 2',sans-serif;font-weight:800;font-size:15px;">${r.bultos}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+
+  body += `<div class="drawer-section">
+    <div class="ds-title">Notas</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:13px;color:var(--text-600);line-height:1.6;">${o.notes||'—'}</div>
+  </div>`;
+
+  document.getElementById('dBody').innerHTML = body;
+
+  // Footer buttons
+  let footer = `<button class="btn btn-ghost btn-sm" onclick="closeDrawer()">Cerrar</button>`;
+  if (o.status === 'pending')  footer += `<button class="btn btn-primary btn-sm" onclick="closeDrawer();processOrder(${idx})">▶ Iniciar orden</button>`;
+  if (o.status === 'progress') footer += `<button class="btn btn-success btn-sm" onclick="closeDrawer();completeOrder(${idx})">✓ Completar</button>`;
+  if (o.type === 'pkg' && o.status !== 'done') footer += `<button class="btn btn-purple btn-sm" onclick="closeDrawer();confirmPkg(${idx})">✓ Confirmar paquetería</button>`;
+  document.getElementById('dFooter').innerHTML = footer;
+
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+// ── NEW ORDER MODAL ──
+let newOrderType = 'sal';
+let newProducts  = [{ sku:'', bultos:1 }];
+let newPackaging = [{ type:'Tarima', qty:1 }];
+let pkgExcelRows = []; // parsed from excel upload
+
+const packagingTypes = ['Tarima','Java','Crate','Caja'];
+
+function openNewOrder(type) {
+  newOrderType = type;
+  newProducts  = [{ sku:'', bultos:1 }];
+  newPackaging = [{ type:'Tarima', qty:1 }];
+  pkgExcelRows = [];
+
+  const icons  = { sal:'📤', trf:'🔄', pkg:'📦' };
+  const titles = { sal:'Nueva Orden de Salida', trf:'Nuevo Traslado Interno', pkg:'Confirmar Paquetería' };
+  const subs   = { sal:'Recibida de cliente externo', trf:'Movimiento interno de almacén', pkg:'Carga desde documento Excel' };
+  const iconBg = { sal:'rgba(239,68,68,0.1)', trf:'rgba(0,194,255,0.1)', pkg:'rgba(139,92,246,0.1)' };
+
+  document.getElementById('mIcon').textContent      = icons[type];
+  document.getElementById('mIcon').style.background = iconBg[type];
+  document.getElementById('mTitle').textContent     = titles[type];
+  document.getElementById('mSub').textContent       = subs[type];
+
+  renderModalBody();
+
+  const btnClasses = { sal:'btn-danger', trf:'btn-info', pkg:'btn-purple' };
+  const btnLabels  = { sal:'✓ Crear orden de salida', trf:'✓ Crear traslado', pkg:'✓ Registrar paquetería' };
+  document.getElementById('mFooter').innerHTML = `
+    <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancelar</button>
+    <button class="btn ${btnClasses[type]} btn-sm" onclick="saveNewOrder()">${btnLabels[type]}</button>`;
+
+  document.getElementById('newOrderModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderModalBody() {
+  const type = newOrderType;
+
+  // ── PKG: Excel upload ──
+  if (type === 'pkg') {
+    document.getElementById('mBody').innerHTML = `
+      <div class="pkg-simple" style="margin-bottom:0;background:none;border:none;padding:0;">
+
+        <div style="background:var(--pkg-bg);border:1.5px solid var(--pkg-border);border-radius:12px;padding:18px 18px 14px;margin-bottom:14px;">
+          <div class="pkg-simple-title" style="margin-bottom:2px;">📊 Cargar documento Excel</div>
+          <div class="pkg-simple-sub" style="margin-bottom:14px;">El sistema extraerá N° interno, tracking y bultos por registro.</div>
+
+          <div id="xlDrop" style="border:2px dashed var(--pkg-border);border-radius:10px;background:white;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .2s;padding:16px;"
+               onclick="document.getElementById('xlFile').click()"
+               ondragover="event.preventDefault();this.style.borderColor='var(--pkg-color)'"
+               ondragleave="this.style.borderColor=''"
+               ondrop="handleXlDrop(event)">
+            <input type="file" id="xlFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleXlFile(this.files[0])">
+            <div style="font-size:28px;">📂</div>
+            <div style="font-size:13px;font-weight:700;color:var(--pkg-color);">Arrastra tu Excel aquí</div>
+            <div style="font-size:11px;color:var(--text-300);">.xlsx · .xls · .csv</div>
+          </div>
+        </div>
+
+        <!-- Parsed rows preview -->
+        <div id="xlPreview" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);">Registros extraídos</div>
+            <div id="xlCount" style="font-size:11px;font-weight:700;color:var(--pkg-color);"></div>
+          </div>
+          <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead>
+                <tr style="background:var(--surface);">
+                  <th style="padding:8px 10px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);border-bottom:1px solid var(--border);">N° Interno</th>
+                  <th style="padding:8px 10px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);border-bottom:1px solid var(--border);">Tracking</th>
+                  <th style="padding:8px 10px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-300);border-bottom:1px solid var(--border);">Bultos</th>
+                  <th style="padding:8px 10px;border-bottom:1px solid var(--border);width:28px;"></th>
+                </tr>
+              </thead>
+              <tbody id="xlBody"></tbody>
+            </table>
+          </div>
+          <button style="margin-top:8px;width:100%;padding:7px;border-radius:8px;border:1.5px dashed var(--pkg-border);background:var(--pkg-bg);color:var(--pkg-color);font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;" onclick="addXlRow()">＋ Agregar fila manualmente</button>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group" style="margin-top:14px;">
+          <label class="form-label">Notas</label>
+          <input class="form-input" id="pkg_notes" type="text" placeholder="Observaciones sobre el envío...">
+        </div>
+      </div>`;
+    return;
+  }
+
+  // ── SAL / TRF ──
+  const areaFields = type === 'trf'
+    ? `<div class="form-group"><label class="form-label">Zona origen <span class="req">*</span></label>
+        <select class="form-select" id="n_area_orig"><option>Zona A</option><option>Zona B</option><option>Zona C</option><option>Zona D</option></select></div>
+       <div class="form-group"><label class="form-label">Zona destino <span class="req">*</span></label>
+        <select class="form-select" id="n_area_dest"><option>Zona B</option><option>Zona A</option><option>Zona C</option><option>Zona D</option></select></div>`
+    : `<div class="form-group"><label class="form-label">Área / Zona <span class="req">*</span></label>
+        <select class="form-select" id="n_area"><option>Zona A</option><option>Zona B</option><option>Zona C</option><option>Zona D</option></select></div>
+       <div class="form-group"></div>`;
+
+  // Products: only SKU + Bultos
+  const prodsHtml = newProducts.map((p,i) => `
+    <div style="display:grid;grid-template-columns:1fr 80px 28px;gap:6px;margin-bottom:6px;" id="pr_${i}">
+      <input class="pe-input" placeholder="SKU" value="${p.sku}" oninput="newProducts[${i}].sku=this.value">
+      <input class="pe-input" type="number" placeholder="Bultos" value="${p.bultos}" min="1" style="text-align:center;" oninput="newProducts[${i}].bultos=+this.value">
+      <div class="pe-del" onclick="removeProd(${i})">✕</div>
+    </div>`).join('');
+
+  // Packaging section (only for salida)
+  const packagingHtml = type === 'sal' ? `
+      <div class="form-divider"></div>
+      <div class="products-editor" style="grid-column:1/-1;">
+        <div class="pe-header" style="margin-bottom:8px;">
+          <div class="pe-title" style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:14px;">📦</span> Empaque de salida
+          </div>
+          <button class="pe-add" onclick="addPkg()">＋ Agregar empaque</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-300);margin-bottom:10px;">¿En qué va a salir la mercancía?</div>
+        <div style="display:grid;grid-template-columns:1fr 100px 28px;gap:6px;margin-bottom:6px;">
+          <div class="pe-label">Tipo de empaque</div>
+          <div class="pe-label" style="text-align:center;">Cantidad</div>
+          <div></div>
+        </div>
+        <div id="pkgContainer">${renderPackagingRows()}</div>
+      </div>` : '';
+
+  document.getElementById('mBody').innerHTML = `
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Referencia cliente <span class="req">*</span></label>
+        <input class="form-input" id="n_ref" type="text" placeholder="Ej. REF-EXT-44121">
+        <span style="font-size:10px;color:var(--text-300);">N° de referencia del cliente externo</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha recibida</label>
+        <input class="form-input" id="n_date" type="date">
+      </div>
+      ${areaFields}
+      <div class="form-group full">
+        <label class="form-label">Notas</label>
+        <input class="form-input" id="n_notes" type="text" placeholder="Instrucciones especiales...">
+      </div>
+      <div class="form-divider"></div>
+      <div class="products-editor" style="grid-column:1/-1;">
+        <div class="pe-header" style="margin-bottom:8px;">
+          <div class="pe-title">SKUs a despachar</div>
+          <button class="pe-add" onclick="addProd()">＋ Agregar SKU</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 28px;gap:6px;margin-bottom:6px;">
+          <div class="pe-label">SKU</div>
+          <div class="pe-label" style="text-align:center;">Bultos</div>
+          <div></div>
+        </div>
+        <div id="prodsContainer">${prodsHtml}</div>
+      </div>
+      ${packagingHtml}
+    </div>`;
+}
+
+function renderPackagingRows() {
+  return newPackaging.map((p,i) => `
+    <div style="display:grid;grid-template-columns:1fr 100px 28px;gap:6px;margin-bottom:6px;" id="pkg_row_${i}">
+      <select class="pe-input" style="appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b83c4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer;"
+        onchange="newPackaging[${i}].type=this.value">
+        ${packagingTypes.map(t=>`<option ${t===p.type?'selected':''}>${t}</option>`).join('')}
+      </select>
+      <input class="pe-input" type="number" min="1" value="${p.qty}" style="text-align:center;" oninput="newPackaging[${i}].qty=+this.value" placeholder="Cant.">
+      <div class="pe-del" onclick="removePkg(${i})">✕</div>
+    </div>`).join('');
+}
+
+function addProd() {
+  newProducts.push({ sku:'', bultos:1 });
+  renderModalBody();
+}
+function removeProd(i) {
+  if (newProducts.length === 1) return;
+  newProducts.splice(i,1);
+  renderModalBody();
+}
+function addPkg() {
+  newPackaging.push({ type:'Tarima', qty:1 });
+  const c = document.getElementById('pkgContainer');
+  if (c) c.innerHTML = renderPackagingRows();
+}
+function removePkg(i) {
+  if (newPackaging.length === 1) return;
+  newPackaging.splice(i,1);
+  const c = document.getElementById('pkgContainer');
+  if (c) c.innerHTML = renderPackagingRows();
+}
+
+// ── EXCEL / CSV HANDLER (SheetJS) ──
+function handleXlDrop(e) {
+  e.preventDefault();
+  e.currentTarget.style.borderColor = '';
+  const file = e.dataTransfer.files[0];
+  if (file) handleXlFile(file);
+}
+
+function handleXlFile(file) {
+  if (!file) return;
+
+  // Update drop zone UI
+  const drop = document.getElementById('xlDrop');
+  if (drop) {
+    drop.innerHTML = `<div style="font-size:24px;">⏳</div><div style="font-size:13px;font-weight:700;color:var(--pkg-color);">Procesando ${file.name}...</div>`;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = ev.target.result;
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+      if (!json.length) {
+        showToast('⚠️', 'El archivo está vacío o sin datos', 'warning');
+        resetDropZone(file.name);
+        return;
+      }
+
+      // Auto-detect column names (case-insensitive, Spanish/English)
+      const keys = Object.keys(json[0]);
+      const findKey = (patterns) => keys.find(k => patterns.some(p => p.test(k.toLowerCase()))) || null;
+
+      const internalKey = findKey([/intern|folio|n.{0,3}interno|numero/i, /^id$/i]);
+      const trackingKey = findKey([/track|guia|guía|awb|n.{0,3}guia/i]);
+      const bultosKey   = findKey([/bulto|paquete|pcs|pieces|qty|cantidad/i]);
+
+      pkgExcelRows = json.map((row, i) => ({
+        internal: String(row[internalKey] || row[keys[0]] || `REG-${i+1}`).trim(),
+        tracking: String(row[trackingKey] || row[keys[1]] || '').trim(),
+        bultos:   parseInt(row[bultosKey]  || row[keys[2]] || 1) || 1,
+      })).filter(r => r.internal);
+
+      // Update drop zone to success state
+      if (drop) {
+        drop.innerHTML = `
+          <div style="font-size:24px;">✅</div>
+          <div style="font-size:13px;font-weight:700;color:var(--success);">${file.name}</div>
+          <div style="font-size:11px;color:var(--text-300);">${pkgExcelRows.length} registros detectados · <span style="color:var(--pkg-color);cursor:pointer;font-weight:700;" onclick="document.getElementById('xlFile').click()">Cambiar archivo</span></div>
+          <input type="file" id="xlFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleXlFile(this.files[0])">`;
+      }
+      renderXlPreview();
+    } catch(err) {
+      console.error(err);
+      showToast('⚠️', 'Error al leer el archivo. Intenta con CSV.', 'warning');
+      resetDropZone(file.name);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function resetDropZone(filename) {
+  const drop = document.getElementById('xlDrop');
+  if (drop) drop.innerHTML = `
+    <input type="file" id="xlFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleXlFile(this.files[0])">
+    <div style="font-size:28px;">📂</div>
+    <div style="font-size:13px;font-weight:700;color:var(--pkg-color);">Arrastra tu Excel aquí</div>
+    <div style="font-size:11px;color:var(--text-300);">.xlsx · .xls · .csv</div>`;
+}
+
+function renderXlPreview() {
+  const preview = document.getElementById('xlPreview');
+  if (!preview) return;
+  preview.style.display = 'block';
+  document.getElementById('xlCount').textContent = `${pkgExcelRows.length} registro${pkgExcelRows.length!==1?'s':''}`;
+  const body = document.getElementById('xlBody');
+  if (!body) return;
+  body.innerHTML = pkgExcelRows.map((r,i) => `
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:8px 10px;">
+        <input style="border:none;background:none;font-family:monospace;font-size:12px;font-weight:700;color:var(--pkg-color);width:100%;outline:none;"
+          value="${r.internal}" oninput="pkgExcelRows[${i}].internal=this.value">
+      </td>
+      <td style="padding:8px 10px;">
+        <input style="border:none;background:none;font-family:monospace;font-size:11px;color:var(--text-400);width:100%;outline:none;"
+          value="${r.tracking}" oninput="pkgExcelRows[${i}].tracking=this.value" placeholder="—">
+      </td>
+      <td style="padding:8px 10px;">
+        <input type="number" min="1" style="border:none;background:none;font-family:'Exo 2',sans-serif;font-weight:800;font-size:14px;color:var(--text-900);width:50px;outline:none;text-align:center;"
+          value="${r.bultos}" oninput="pkgExcelRows[${i}].bultos=+this.value">
+      </td>
+      <td style="padding:8px 10px;">
+        <div style="width:22px;height:22px;border-radius:6px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text-300);"
+          onclick="pkgExcelRows.splice(${i},1);renderXlPreview()">✕</div>
+      </td>
+    </tr>`).join('');
+}
+
+function addXlRow() {
+  pkgExcelRows.push({ internal:'INT-PKG-NEW', tracking:'', bultos:1 });
+  renderXlPreview();
+}
+
+async function saveNewOrderDB(localOrder) {
+  const tipoMap = { sal:'salida', trf:'traslado', pkg:'paqueteria' };
+  // get first almacen
+  const { data: alms } = await db.from('ideascan.almacenes').select('id').limit(1);
+  const almId = alms?.[0]?.id;
+  const payload = {
+    folio: localOrder.id,
+    tipo: tipoMap[localOrder.type] || 'salida',
+    estado: 'pendiente',
+    almacen_origen: almId,
+    notas: localOrder.notes || '',
+    prioridad: 'normal',
+  };
+  await db.from('ideascan.ordenes').insert(payload);
+}
+
+function saveNewOrder() {
+  // ── PKG ──
+  if (newOrderType === 'pkg') {
+    if (!pkgExcelRows.length) { showToast('⚠️','Carga un Excel con al menos un registro','warning'); return; }
+    const newO = {
+      id: `PKG-2026-00${45+orders.filter(o=>o.type==='pkg').length}`,
+      type:'pkg', status:'pending',
+      date: 'Ahora',
+      ref: '—',
+      internalNum: `${pkgExcelRows.length} registros`,
+      xlRows: pkgExcelRows,
+      notes: document.getElementById('pkg_notes')?.value || '',
+      progress: 0
+    };
+    orders.unshift(newO);
+    saveNewOrderDB(newO).catch(console.error);
+    closeModal();
+    applyFilters();
+    showToast('📦', `${newO.id} — ${pkgExcelRows.length} registros importados`, 'success');
+    return;
+  }
+
+  // ── SAL / TRF ──
+  const ref = document.getElementById('n_ref')?.value;
+  if (!ref) { showToast('⚠️','La referencia del cliente es obligatoria','warning'); return; }
+
+  const area = newOrderType === 'trf'
+    ? `${document.getElementById('n_area_orig')?.value} → ${document.getElementById('n_area_dest')?.value}`
+    : document.getElementById('n_area')?.value;
+
+  const prefix = newOrderType === 'sal' ? 'ORD' : 'TRF';
+  const newO = {
+    id: `${prefix}-2026-0${900+orders.filter(o=>o.type===newOrderType).length}`,
+    type: newOrderType, status:'pending',
+    date: 'Ahora', ref, area,
+    products: newProducts.filter(p => p.sku),
+    packaging: newOrderType === 'sal' ? [...newPackaging] : undefined,
+    notes: document.getElementById('n_notes')?.value || '',
+    progress: 0
+  };
+  orders.unshift(newO);
+  saveNewOrderDB(newO).catch(console.error);
+  closeModal();
+  applyFilters();
+  showToast('✓', `${newO.id} creada`, 'success');
+}
+
+function closeModal() {
+  document.getElementById('newOrderModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── TOAST ──
+function showToast(icon, title, type='success') {
+  const t  = document.getElementById('toast');
+  const bg = { success:'var(--success)', warning:'var(--warning)', info:'var(--blue-500)', error:'var(--danger)' };
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastSub').textContent   = new Date().toLocaleTimeString('es-MX');
+  document.getElementById('toastIcon').textContent  = icon;
+  document.getElementById('toastIcon').style.background = bg[type]||bg.success;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── INIT ──
+applyFilters();
+</script>
+<script>
+// ── Sidebar toggle ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+</script>
+
+<script>
+(async function loadDynamicData() {
+  const H = {'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcXVndHhleW5rb3psb2Jlb2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwOTYxMzAsImV4cCI6MjA4NjY3MjEzMH0.zs4XiF8AgcE-l3ebtaxvoN7V9rf-6MHWNxMThiQUXKE','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcXVndHhleW5rb3psb2Jlb2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwOTYxMzAsImV4cCI6MjA4NjY3MjEzMH0.zs4XiF8AgcE-l3ebtaxvoN7V9rf-6MHWNxMThiQUXKE','Accept':'application/json','Accept-Profile':'ideascan'};
+  try {
+    const [cRes,wRes] = await Promise.all([
+      fetch('https://usqugtxeynkozlobeojt.supabase.co/rest/v1/clientes?select=id,nombre,color&activo=eq.true&order=nombre.asc',{headers:H}),
+      fetch('https://usqugtxeynkozlobeojt.supabase.co/rest/v1/almacenes?select=id,nombre&activo=eq.true&order=nombre.asc',{headers:H}),
+    ]);
+    window._cl = cRes.ok ? await cRes.json() : [];
+    window._wh = wRes.ok ? await wRes.json() : [];
+    document.querySelectorAll('[data-fill="clientes"]').forEach(sel=>{
+      const ph=sel.innerHTML; sel.innerHTML=ph;
+      window._cl.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.nombre;sel.appendChild(o);});
+    });
+    document.querySelectorAll('[data-fill="almacenes"]').forEach(sel=>{
+      window._wh.forEach(w=>{const o=document.createElement('option');o.value=w.id;o.textContent=w.nombre;sel.appendChild(o);});
+    });
+    if(typeof onDataLoaded==='function') onDataLoaded(window._cl, window._wh);
+  } catch(e){console.warn('loadDynamicData:',e.message);}
+})();
+</script>
+</body>
+</html>
